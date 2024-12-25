@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 let
- themes = pkgs.callPackage ./themes.nix {};
+  themes = pkgs.callPackage ./themes.nix {};
 in
 {
   environment.systemPackages = [
