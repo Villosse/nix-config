@@ -7,15 +7,11 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    eww = {
-      url = "github:elkowar/eww";
+    hyprland.url = "github:hyprwm/Hyprland";
+    marble = {
+      url = "git+ssh://git@github.com/marble-shell/shell.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    hyprland.url = "github:hyprwm/Hyprland";
-  # For AGS
-    matugen.url = "github:InioX/matugen?ref=v2.2.0";
-    ags.url = "github:Aylur/ags";
-    astal.url = "github:Aylur/astal";
   };
 
   outputs = { self, nixpkgs, ... }@inputs:

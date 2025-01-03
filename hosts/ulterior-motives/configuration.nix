@@ -10,7 +10,10 @@
     ../../modules/sddm
     ../../modules/ags
   ];
-  ags.enable = true;
+
+  marble = {
+    enable = true;
+  };
 
   networking.networkmanager.enable = true;
   networking.hostName = "lennyAsNIX";
