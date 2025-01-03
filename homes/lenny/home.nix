@@ -6,6 +6,7 @@
     ../../modules/vim
     ../../modules/firefox
     ../../modules/nh
+    ../../modules/discord
   ];
 
   users.users.lenny = {
@@ -21,6 +22,8 @@
       "disk"
     ];
   };
+  
+  vesktop.enable = true;
 
   home-manager = {
     useGlobalPkgs = true;
@@ -32,6 +35,7 @@
       home.username = "lenny";
       home.homeDirectory = "/home/lenny";
       home.stateVersion = "23.11";
+      #home.packages = with pkgs; [ tree ];
       home.sessionVariables = {
         EDITOR = "vim";
         BROWSER = "firefox";

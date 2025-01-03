@@ -11,6 +11,11 @@
       url = "github:elkowar/eww";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprland.url = "github:hyprwm/Hyprland";
+  # For AGS
+    matugen.url = "github:InioX/matugen?ref=v2.2.0";
+    ags.url = "github:Aylur/ags";
+    astal.url = "github:Aylur/astal";
   };
 
   outputs = { self, nixpkgs, ... }@inputs:

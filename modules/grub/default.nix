@@ -16,6 +16,6 @@ in
     splashImage = null;
     efiInstallAsRemovable = true;
     
-    theme = themes.minecraft;
+    theme = themes.fallout;
   };
 }

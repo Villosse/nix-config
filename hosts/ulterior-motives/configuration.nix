@@ -8,8 +8,10 @@
     #../../modules/systemdboot
     ../../modules/hyprland
     ../../modules/sddm
-    ../../modules/eww
+    ../../modules/ags
   ];
+  ags.enable = true;
+
   networking.networkmanager.enable = true;
   networking.hostName = "lennyAsNIX";
   environment.systemPackages = with pkgs; [];
