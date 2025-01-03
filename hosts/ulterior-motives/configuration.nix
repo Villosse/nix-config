@@ -11,7 +11,7 @@
     ../../modules/ags
   ];
 
-  marble = {
+  ags = {
     enable = true;
   };
 
