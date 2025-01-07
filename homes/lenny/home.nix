@@ -2,7 +2,7 @@
 {
   imports = [
     inputs.home-manager.nixosModules.home-manager
-    ../../modules/git
+    #../../modules/git
     ../../modules/vim
     ../../modules/firefox
     ../../modules/nh
@@ -22,25 +22,32 @@
       "disk"
     ];
   };
-  
   vesktop.enable = true;
 
+  time.timeZone = "Europe/Paris";
+  
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
     backupFileExtension = "backup";
+    sharedModules = [
+      { imports = [ ../../modules/git ]; }
+    ];
     users.lenny = { pkgs, ... }: {
       programs.home-manager.enable = true;
       xdg.enable = true;
       home.username = "lenny";
       home.homeDirectory = "/home/lenny";
       home.stateVersion = "23.11";
-      #home.packages = with pkgs; [ tree ];
+      home.packages = with pkgs; [ tree vscode ];
       home.sessionVariables = {
         EDITOR = "vim";
         BROWSER = "firefox";
         TERMINAL = "kitty";
       };
+      nix.extraOptions = ''
+        experimental-features = nix-command flakes
+      '';
     };
   };
 

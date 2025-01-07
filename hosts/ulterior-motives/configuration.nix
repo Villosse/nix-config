@@ -12,9 +12,12 @@
   ];
 
   ags = {
-    enable = true;
+    enable = false;
   };
 
+  fonts.packages = with pkgs; [
+    nerd-fonts.iosevka-term
+  ];
   networking.networkmanager.enable = true;
   networking.hostName = "lennyAsNIX";
   environment.systemPackages = with pkgs; [];
