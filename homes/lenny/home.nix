@@ -3,7 +3,7 @@
   imports = [
     inputs.home-manager.nixosModules.home-manager
     #../../modules/git
-    ../../modules/vim
+    #../../modules/vim
     ../../modules/firefox
     ../../modules/nh
     ../../modules/discord
@@ -31,7 +31,7 @@
     useUserPackages = true;
     backupFileExtension = "backup";
     sharedModules = [
-      { imports = [ ../../modules/git ]; }
+      { imports = [ ../../modules/git ../../modules/vim ]; }
     ];
     users.lenny = { pkgs, ... }: {
       programs.home-manager.enable = true;
