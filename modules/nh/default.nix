@@ -2,6 +2,6 @@
 {
   programs.nh = {
     enable = true;
-    flake = /home/lenny/myconf;
+    flake = "/home/lenny/myconf";
   };
 }

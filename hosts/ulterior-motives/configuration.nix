@@ -8,12 +8,8 @@
     #../../modules/systemdboot
     ../../modules/hyprland
     ../../modules/sddm
-    ../../modules/ags
   ];
 
-  ags = {
-    enable = false;
-  };
 
   fonts.packages = with pkgs; [
     nerd-fonts.iosevka-term

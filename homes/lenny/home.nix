@@ -7,6 +7,7 @@
     ../../modules/firefox
     ../../modules/nh
     ../../modules/discord
+    ../../modules/eww
   ];
 
   users.users.lenny = {
@@ -27,13 +28,19 @@
   time.timeZone = "Europe/Paris";
   
   home-manager = {
+    extraSpecialArgs = { inherit inputs; };
     useGlobalPkgs = true;
     useUserPackages = true;
     backupFileExtension = "backup";
     sharedModules = [
-      { imports = [ ../../modules/git ../../modules/vim ]; }
+      { imports = [
+        ../../modules/git
+        ../../modules/vim
+        ../../modules/eww
+        ];
+      }
     ];
-    users.lenny = { pkgs, ... }: {
+    users.lenny = { pkgs, config, ... }: {
       programs.home-manager.enable = true;
       xdg.enable = true;
       home.username = "lenny";
@@ -41,7 +48,6 @@
       home.stateVersion = "23.11";
       home.packages = with pkgs; [ tree vscode ];
       home.sessionVariables = {
-        EDITOR = "vim";
         BROWSER = "firefox";
         TERMINAL = "kitty";
       };
