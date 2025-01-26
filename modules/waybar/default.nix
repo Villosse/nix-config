@@ -135,10 +135,10 @@ in
           on-click = "rofi -show drun";
           on-click-right = "killall rofi";
         };
-        "custom/power" = {
-          format = " ";
-          on-click = "bash ~/.config/rofi/leave.sh";
-        };
+                #"custom/power" = {
+                #format = " ";
+                #on-click = "bash ~/.config/rofi/leave.sh";
+                #};
       };
     };
     # stylix.targets.waybar.enable = false;
