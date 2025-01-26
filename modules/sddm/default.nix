@@ -1,20 +1,23 @@
-{ config, pkgs, ... }:
+{ lib, config, pkgs-local, ... }:
+with lib;
 let
-  themes = pkgs.callPackage ./themes.nix {};
+  cfg = config.lenny.sddm;
 in
 {
-  environment.systemPackages = [
-    pkgs.libsForQt5.qt5.qtgraphicaleffects
-    themes.astronaut
-  ];
-  services.displayManager = 
-  {
-    defaultSession = "hyprland";
-    sddm = {
-      enable = true;
-      wayland.enable = true;
-      theme = "astronaut";
-      settings.Theme.CursorTheme = "Bibata-Modern-Classic";
+  options.lenny.sddm = { enable = mkEnableOption "sddm"; };
+  config = mkIf cfg.enable {
+    services.xserver = {
+      enable = false;
     };
+
+    services.displayManager.sddm = {
+      enable = true;
+      autoNumlock = true;
+      wayland.enable = true;
+      theme = "sddm-theme-corners";
+    };
+
+    services.libinput.enable = true;
+    environment.systemPackages = with pkgs-local; [ sddm-theme ];
   };
 }
