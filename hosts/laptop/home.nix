@@ -13,7 +13,7 @@
     gtk.enable = true;
     hyprland = {
       enable = true;
-      wallpaper = "${rootPath}/assets/Wallpapers/pixelart_night_train.png";
+      wallpaper = "${rootPath}/assets/Wallpapers/spooky.jpg";
     };
     mako.enable = true;
     nvim.enable = true;

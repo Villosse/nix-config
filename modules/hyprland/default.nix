@@ -105,8 +105,8 @@ in
         builtins.concatLists (builtins.genList (i:
             let ws = i + 6;
             in [
-              "$ALT, code:1${toString i}, workspace, ${toString ws}"
-              "$ALT SHIFT, code:1${toString i}, movetoworkspace, ${toString ws}"
+              "Control_L&$ALT, code:1${toString i}, workspace, ${toString ws}"
+              "Control_L&$ALT SHIFT, code:1${toString i}, movetoworkspace, ${toString ws}"
             ]
           )
           5));
@@ -147,7 +147,7 @@ in
         # xwayland options
         xwayland.force_zero_scaling = true;
         monitor = [
-            "eDP-1, highrr, 0x0, 2"
+            "eDP-1, highrr, 0x0, 1.6"
             ", preferred, 1920x0, 1"
           ];
 
