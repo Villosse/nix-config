@@ -46,6 +46,13 @@
     sway.enable = true;
   };
 
+  ubuntuVm = {
+    enable = true;
+    memoryMiB = 2048;
+    cpuCores = 4;
+    diskSizeGB = 50;
+  };
+
   users.users = {
     "${username}" = {
       isNormalUser = true;

@@ -55,7 +55,6 @@
     # VM
     qemu
     waypipe
-    virt-viewer
 
     # Haskell
     ghc
