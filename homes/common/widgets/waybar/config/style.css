@@ -64,7 +64,8 @@ tooltip {
   font-size: 16px;
 }
 
-#tags {
+#tags,
+#workspaces {
   background: #363a4f;
   margin: 5px 7px 5px 5px;
   padding: 0px 5px;
@@ -72,7 +73,8 @@ tooltip {
   color: #cad3f5;
 }
 
-#tags button {
+#tags button,
+#workspaces button {
   padding: 0px 8px;
   margin: 2px 2px;
   border-radius: 8px;
@@ -81,17 +83,20 @@ tooltip {
   background: transparent;
 }
 
-#tags button.occupied {
+#tags button.occupied,
+#workspaces button {
   background: #494d64;
   color: #b7bdf8;
 }
 
-#tags button.focused {
+#tags button.focused,
+#workspaces button.focused {
   background: #c6a0f6;
   color: #24273a;
 }
 
-#tags button:hover {
+#tags button:hover,
+#workspaces button:hover {
   background: #5b6078;
   color: #cad3f5;
 }

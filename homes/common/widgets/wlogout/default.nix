@@ -17,7 +17,7 @@
       }
       {
         label = "logout";
-        action = "sleep 1; pkill maomao";
+        action = "sleep 1; loginctl terminate-session ''";
         text = "Exit";
         keybind = "e";
       }

@@ -52,6 +52,11 @@
     blueberry
     firefox
 
+    # VM
+    qemu
+    waypipe
+    virt-viewer
+
     # Haskell
     ghc
 
@@ -62,11 +67,11 @@
   ];
 
   programs = {
-    steam.gamescopeSession.enable = true;
-    dconf.enable = true;
     xwayland.enable = true;
-    mango = {
+    dconf.enable = true;
+    sway = {
       enable = true;
     };
+    steam.gamescopeSession.enable = true;
   };
 }

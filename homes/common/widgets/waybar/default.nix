@@ -46,8 +46,8 @@ in
 
       modules-left = [
         "custom/launcher"
-        "dwl/tags"
-        "dwl/window"
+        "sway/workspaces"
+        "sway/window"
       ];
       modules-center = [ "clock" ];
       modules-right = [
@@ -63,20 +63,21 @@ in
         "custom/power"
       ];
 
-      "dwl/tags" = {
-        num-tags = 9;
-        hide-vacant = true;
-        tag-labels = [
-          "一"
-          "二"
-          "三"
-          "四"
-          "五"
-          "六"
-          "七"
-          "八"
-          "九"
-        ];
+      "sway/workspaces" = {
+        disable-scroll = false;
+        all-outputs = true;
+        format = "{icon}";
+        format-icons = {
+          "1" = "1";
+          "2" = "2";
+          "3" = "3";
+          "4" = "4";
+          "5" = "5";
+          "6" = "6";
+          "7" = "7";
+          "8" = "8";
+          "9" = "9";
+        };
       };
 
       "wlr/taskbar" = {
@@ -93,33 +94,30 @@ in
         ];
       };
 
-      "dwl/window" = {
+      "sway/window" = {
         format = "{}";
-        format-alt = "maomaowm";
         max-length = 50;
         tooltip = true;
         tooltip-format = "{}";
         rewrite = {
-          "^$" = "maomaowm";
-          # Clean up common window title patterns
-          "(.*) — Mozilla Firefox" = " $1";
-          "(.*) - Mozilla Firefox" = " $1";
+          "^$" = "sway";
+          "(.*) — Mozilla Firefox" = " $1";
+          "(.*) - Mozilla Firefox" = " $1";
           "(.*) — Qutebrowser" = "󰖟 $1";
           "(.*) - Qutebrowser" = "󰖟 $1";
-          "(.*) — Visual Studio Code" = " $1";
-          "(.*) - Visual Studio Code" = " $1";
-          "(.*) — Neovim" = " $1";
-          "(.*) - Neovim" = " $1";
-          "nvim (.*)" = " $1";
-          "vim (.*)" = " $1";
-          "nvim" = " ";
+          "(.*) — Visual Studio Code" = " $1";
+          "(.*) - Visual Studio Code" = " $1";
+          "(.*) — Neovim" = " $1";
+          "(.*) - Neovim" = " $1";
+          "nvim (.*)" = " $1";
+          "vim (.*)" = " $1";
+          "nvim" = " ";
           "(.*) — Terminal" = "󱙝 $1";
           "(.*) - Terminal" = "󱙝 $1";
           "^Terminal$" = "󱙝 Terminal";
-          "^Discord$" = " Discord";
-          "WebCord - (.*)" = " $1";
-          "^Spotify$" = " Spotify";
-          # Remove common suffixes that don't add value
+          "^Discord$" = " Discord";
+          "WebCord - (.*)" = " $1";
+          "^Spotify$" = " Spotify";
           " - zsh$" = "";
           " - bash$" = "";
           " \\[.*\\]$" = "";

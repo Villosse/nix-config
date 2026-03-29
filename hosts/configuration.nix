@@ -51,9 +51,12 @@
 
   environment.shells = with pkgs; [ zsh ];
 
+  boot.tmp.cleanOnBoot = true;
+
   environment.variables = {
     TERMINAL = "alacritty";
     EDITOR = "vim";
     VISUAL = "vim";
+    NIXPKGS_ALLOW_UNFREE = "1";
   };
 }

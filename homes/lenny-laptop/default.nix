@@ -25,7 +25,7 @@ in
 
     ../common/notifications/swaync
 
-    ../common/windowManagers/maomaowm
+    ../common/windowManagers/sway
 
     ../common/widgets/gtk
     ../common/widgets/waybar

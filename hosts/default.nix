@@ -33,7 +33,6 @@
         username = username;
       };
       modules = [
-        inputs.mango.nixosModules.mango
         ./lenny-laptop
         ./configuration.nix
       ];

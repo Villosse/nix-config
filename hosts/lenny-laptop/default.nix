@@ -24,7 +24,7 @@
 
   virtualisation = {
     docker.enable = true;
-    # libvirtd.enable = true;
+    libvirtd.enable = true;
     # virtualbox.host.enable = true;
   };
 
@@ -43,7 +43,7 @@
 
   displayManager = {
     theme = pkgs.sddm-theme;
-    maomaowm.enable = true;
+    sway.enable = true;
   };
 
   users.users = {
@@ -56,6 +56,7 @@
         "docker"
         "dialout"
         "libvirtd"
+        "kvm"
       ];
       uid = 1000;
       shell = pkgs.zsh;
@@ -91,7 +92,7 @@
     enable = true;
     extraPortals = with pkgs; [
       xdg-desktop-portal-gtk
-      xdg-desktop-portal-hyprland
+      xdg-desktop-portal-wlr
     ];
   };
 
