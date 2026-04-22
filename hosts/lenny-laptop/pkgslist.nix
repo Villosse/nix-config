@@ -37,7 +37,7 @@
     # Terminal utils
     btop
     lsd
-    neofetch
+    fastfetch
     tree
     ripgrep
     vim
@@ -49,7 +49,6 @@
     wayshot
     komikku
     gimp
-    blueberry
     firefox
 
     # VM
@@ -71,6 +70,6 @@
     sway = {
       enable = true;
     };
-    steam.gamescopeSession.enable = true;
+    #    steam.gamescopeSession.enable = true;
   };
 }

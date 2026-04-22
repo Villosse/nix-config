@@ -35,4 +35,16 @@ in
     };
 
   };
+
+  config = mkIf (cfg.theme != null) {
+    services.displayManager.sddm = {
+      theme = "sddm-astronaut-theme";
+      extraPackages = with pkgs; [
+        kdePackages.qtmultimedia
+        kdePackages.qtsvg
+        kdePackages.qtvirtualkeyboard
+      ];
+    };
+    environment.systemPackages = [ cfg.theme ];
+  };
 }

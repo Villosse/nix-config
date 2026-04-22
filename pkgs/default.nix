@@ -1,4 +1,4 @@
 pkgs: {
-  sddm-theme = pkgs.libsForQt5.callPackage ./sddm-theme { };
+  sddm-theme = pkgs.sddm-astronaut.override { embeddedTheme = "jake_the_dog"; };
   control_modules = pkgs.callPackage ./control_modules { };
 }

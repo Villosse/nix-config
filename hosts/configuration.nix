@@ -26,7 +26,7 @@
     vim
     zsh
 
-    python311
+    python314
     poetry
     docker-compose
 

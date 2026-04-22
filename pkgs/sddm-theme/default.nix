@@ -2,8 +2,7 @@
   lib,
   qtbase,
   qtsvg,
-  qtgraphicaleffects,
-  qtquickcontrols2,
+  qtdeclarative,
   wrapQtAppsHook,
   stdenvNoCC,
   wallpaper ? null,
@@ -16,13 +15,13 @@ stdenvNoCC.mkDerivation {
 
   nativeBuildInputs = [
     wrapQtAppsHook
+    qtbase
   ];
 
   propagatedUserEnvPkgs = [
     qtbase
     qtsvg
-    qtgraphicaleffects
-    qtquickcontrols2
+    qtdeclarative
   ];
 
   installPhase =

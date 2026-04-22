@@ -22,6 +22,14 @@
   networking.hostName = "lenny-laptop";
   networking.networkmanager.enable = true;
 
+  natHotspot = {
+    enable = true;
+    internalInterface = "enp3s0";
+    externalInterface = "wlp4s0";
+  };
+
+  nix.package = pkgs.nixVersions.latest;
+
   virtualisation = {
     docker.enable = true;
     libvirtd.enable = true;
@@ -94,6 +102,7 @@
   };
 
   services.openssh.enable = true;
+  services.tailscale.enable = true;
 
   xdg.portal = {
     enable = true;
@@ -107,6 +116,10 @@
     text = ''
       auth include login
     '';
+  };
+  nix.settings = {
+    substituters = [ "https://s3.cri.epita.fr/cri-nix-cache.s3.cri.epita.fr" ];
+    trusted-public-keys = [ "cache.nix.cri.epita.fr:qDIfJpZWGBWaGXKO3wZL1zmC+DikhMwFRO4RVE6VVeo=" ];
   };
 
   systemd.settings.Manager.RebootWatchdogSec = "0";
