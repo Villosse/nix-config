@@ -1,20 +1,19 @@
 {
   pkgs,
   rootPath,
-  inputs,
   outputs,
   username,
+  stateVersion,
   ...
 }:
-let
-  stateVersion = "25.05";
-in
 {
   imports = [
     ./nixpkgs.nix
+    ./packages.nix
 
-    ../common/scripts/default.nix
+    ../common/scripts
 
+    ../common/apps/git
     ../common/apps/cava
     ../common/apps/fzf
     ../common/apps/ghostty
@@ -35,39 +34,16 @@ in
 
   home.username = username;
   home.homeDirectory = "/home/${username}";
+  home.stateVersion = stateVersion;
 
   manual.manpages.enable = false;
   fonts.fontconfig.enable = true;
 
-  programs = {
-    git = {
-      enable = true;
-      settings = {
-        init.defaultBranch = "master";
-        pull.rebase = true;
-        core.editor = "nvim";
-        push.autoSetupRemote = true;
-        user = {
-          name = "lenny.chiadmi-delage";
-          email = "lenny.chiadmi-delage@epita.fr";
-        };
-
-        color = {
-          ui = "auto";
-          branch = "auto";
-          diff = "auto";
-          interactive = "auto";
-          status = "auto";
-        };
-
-        commit.verbose = true;
-        branch.autosetuprebase = "always";
-        push.default = "simple";
-        rebase = {
-          autoSquash = true;
-          autoStash = true;
-        };
-      };
+  programs.git = {
+    enable = true;
+    settings.user = {
+      name = "lenny.chiadmi-delage";
+      email = "lenny.chiadmi-delage@epita.fr";
     };
   };
 
@@ -88,20 +64,6 @@ in
       y = 0;
       transform = 0;
     };
-
-  };
-
-  home = {
-    inherit stateVersion;
-    packages = with pkgs; [
-      inputs.nixvim.packages.x86_64-linux.default
-      nodejs_20
-      yarn
-      zulip
-      obsidian
-      docker-compose
-      discord
-    ];
   };
 
   services.ssh-agent.enable = true;

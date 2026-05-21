@@ -51,9 +51,7 @@
 
   environment.shells = with pkgs; [ zsh ];
 
-  boot.tmp.cleanOnBoot = true;
-
-  environment.variables = {
+environment.variables = {
     TERMINAL = "alacritty";
     EDITOR = "vim";
     VISUAL = "vim";
