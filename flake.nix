@@ -14,7 +14,7 @@
     };
 
     nixvim = {
-      url = "github:Orysse/nixvim";
+      url = "github:Villosse/nixvim";
     };
 
     mango = {
@@ -40,6 +40,7 @@
     packages = forAllSystems (
       system:
         {
+          ovm = inputs.ovm.packages.${system}.default;
           nixvim = inputs.nixvim.packages.${system}.default;
           home-manager = home-manager.packages.${system}.default;
         }
