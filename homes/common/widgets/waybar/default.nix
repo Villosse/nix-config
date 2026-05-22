@@ -1,8 +1,4 @@
-{
-  pkgs,
-  ...
-}:
-let
+{pkgs, ...}: let
   colors = {
     rosewater = "f4dbd6";
     flamingo = "f0c6c6";
@@ -31,8 +27,7 @@ let
     mantle = "1e2030";
     crust = "181926";
   };
-in
-{
+in {
   programs.waybar.enable = true;
   programs.waybar.settings = {
     mainBar = {
@@ -49,7 +44,7 @@ in
         "sway/workspaces"
         "sway/window"
       ];
-      modules-center = [ "clock" ];
+      modules-center = ["clock"];
       modules-right = [
         "tray"
         "custom/notification"
@@ -287,28 +282,27 @@ in
 
   # Configure waybar as a systemd user service
   /*
-    systemd.user.services.waybar = {
-      Unit = {
-        Description = "Highly customizable Wayland bar for Sway and Wlroots based compositors";
-        Documentation = "https://github.com/Alexays/Waybar/wiki";
-        PartOf = [ "graphical-session.target" ];
-        After = [ "graphical-session.target" ];
-        Requisite = [ "graphical-session.target" ];
-      };
-
-      Service = {
-        Type = "simple";
-        ExecStart = "${pkgs.waybar}/bin/waybar";
-        ExecReload = "${pkgs.coreutils}/bin/kill -SIGUSR2 $MAINPID";
-        Restart = "on-failure";
-        RestartSec = 1;
-        TimeoutStopSec = 10;
-      };
-
-      Install = {
-        WantedBy = [ "graphical-session.target" ];
-      };
+  systemd.user.services.waybar = {
+    Unit = {
+      Description = "Highly customizable Wayland bar for Sway and Wlroots based compositors";
+      Documentation = "https://github.com/Alexays/Waybar/wiki";
+      PartOf = [ "graphical-session.target" ];
+      After = [ "graphical-session.target" ];
+      Requisite = [ "graphical-session.target" ];
     };
-  */
 
+    Service = {
+      Type = "simple";
+      ExecStart = "${pkgs.waybar}/bin/waybar";
+      ExecReload = "${pkgs.coreutils}/bin/kill -SIGUSR2 $MAINPID";
+      Restart = "on-failure";
+      RestartSec = 1;
+      TimeoutStopSec = 10;
+    };
+
+    Install = {
+      WantedBy = [ "graphical-session.target" ];
+    };
+  };
+  */
 }

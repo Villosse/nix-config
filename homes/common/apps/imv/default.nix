@@ -52,8 +52,7 @@ _: {
         "<Shift+G>" = "goto -1";
         "<Home>" = "goto 1";
         "<End>" = "goto -1";
-        "<Shift+W>" =
-          "exec imv $(find $(dirname $imv_current_file) -type f -name '*.jpg' -o -name '*.jpeg' -o -name '*.png' -o -name '*.gif' -o -name '*.webp' | shuf -n 1)";
+        "<Shift+W>" = "exec imv $(find $(dirname $imv_current_file) -type f -name '*.jpg' -o -name '*.jpeg' -o -name '*.png' -o -name '*.gif' -o -name '*.webp' | shuf -n 1)";
         "<Ctrl+plus>" = "zoom 1.2";
         "<Ctrl+equal>" = "zoom 1.2";
         "<Ctrl+minus>" = "zoom 0.8";
@@ -114,15 +113,12 @@ _: {
         "8" = "next 8";
         "9" = "next 9";
         "0" = "goto -1";
-        "<Ctrl+f>" =
-          "exec imv $(find $(dirname $imv_current_file) -type f \\( -name '*.jpg' -o -name '*.jpeg' -o -name '*.png' -o -name '*.gif' -o -name '*.webp' -o -name '*.bmp' -o -name '*.tiff' \\) | fzf)";
-        "<Ctrl+g>" =
-          "exec imv $(find ~/Pictures -type f \\( -name '*.jpg' -o -name '*.jpeg' -o -name '*.png' -o -name '*.gif' -o -name '*.webp' \\) | fzf)";
+        "<Ctrl+f>" = "exec imv $(find $(dirname $imv_current_file) -type f \\( -name '*.jpg' -o -name '*.jpeg' -o -name '*.png' -o -name '*.gif' -o -name '*.webp' -o -name '*.bmp' -o -name '*.tiff' \\) | fzf)";
+        "<Ctrl+g>" = "exec imv $(find ~/Pictures -type f \\( -name '*.jpg' -o -name '*.jpeg' -o -name '*.png' -o -name '*.gif' -o -name '*.webp' \\) | fzf)";
         "<Ctrl+s>" = "slideshow";
         "<Ctrl+Shift+s>" = "exec imv -s 5 $(dirname $imv_current_file)/*";
         "<Ctrl+q>" = "quit";
-        "<F1>" =
-          "exec echo 'IMV Keybindings: q=quit, j/k=next/prev, f=fullscreen, r=rotate, s=scale, d=delete, w=wallpaper, i=info, e=edit' | imv-msg";
+        "<F1>" = "exec echo 'IMV Keybindings: q=quit, j/k=next/prev, f=fullscreen, r=rotate, s=scale, d=delete, w=wallpaper, i=info, e=edit' | imv-msg";
       };
     };
   };

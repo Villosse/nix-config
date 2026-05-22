@@ -4,8 +4,7 @@
   config,
   ...
 }:
-with lib;
-let
+with lib; let
   my_colors = {
     rosewater = "f4dbd6";
     flamingo = "f0c6c6";
@@ -57,8 +56,7 @@ let
     --vim-esc-exits \
     --wrap
   '';
-in
-{
+in {
   xsession.windowManager.i3 = {
     enable = true;
     config = rec {

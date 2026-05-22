@@ -5,32 +5,32 @@
   username,
   stateVersion,
   ...
-}:
-{
-  imports = [
-    ./nixpkgs.nix
-    ./packages.nix
+}: {
+  imports =
+    [
+      ./nixpkgs.nix
+      ./packages.nix
 
-    ../common/scripts
+      ../common/scripts
 
-    ../common/apps/git
-    ../common/apps/cava
-    ../common/apps/fzf
-    ../common/apps/ghostty
-    ../common/apps/tmux
-    ../common/apps/zsh
+      ../common/apps/git
+      ../common/apps/cava
+      ../common/apps/fzf
+      ../common/apps/ghostty
+      ../common/apps/tmux
+      ../common/apps/zsh
 
-    ../common/launchers/bemenu
+      ../common/launchers/bemenu
 
-    ../common/notifications/swaync
+      ../common/notifications/swaync
 
-    ../common/windowManagers/sway
+      ../common/windowManagers/sway
 
-    ../common/widgets/gtk
-    ../common/widgets/waybar
-    ../common/widgets/wlogout
-  ]
-  ++ (builtins.attrValues outputs.homeManagerModules);
+      ../common/widgets/gtk
+      ../common/widgets/waybar
+      ../common/widgets/wlogout
+    ]
+    ++ (builtins.attrValues outputs.homeManagerModules);
 
   home.username = username;
   home.homeDirectory = "/home/${username}";

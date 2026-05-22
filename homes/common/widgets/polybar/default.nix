@@ -1,8 +1,4 @@
-{
-  pkgs,
-  ...
-}:
-let
+{pkgs, ...}: let
   my_colors = {
     rosewater = "f4dbd6";
     flamingo = "f0c6c6";
@@ -40,8 +36,7 @@ let
   mem_up = "${pkgs.control_modules}/bin/memory_controller up";
   mem_down = "${pkgs.control_modules}/bin/memory_controller down";
   mem_del = "${pkgs.killall}/bin/killall memory_controller; rm /tmp/memory_controller.*; ${pkgs.control_modules}/bin/memory_controller";
-in
-{
+in {
   services.polybar = {
     enable = true;
     script = ''

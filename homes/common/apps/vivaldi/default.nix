@@ -1,6 +1,8 @@
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  ...
+}: {
   programs.vivaldi = {
     enable = true;
 
@@ -15,7 +17,7 @@
 
     # Extensions (using Chrome Web Store IDs)
     extensions = [
-      { id = "cjpalhdlnbpafiamejdnhcphjbkeiagm"; } # uBlock Origin
+      {id = "cjpalhdlnbpafiamejdnhcphjbkeiagm";} # uBlock Origin
     ];
   };
 

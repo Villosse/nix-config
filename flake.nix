@@ -22,45 +22,40 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    /*
-      hyprland = {
-        url = "github:hyprwm/Hyprland";
-      };
-    */
+    ovm = {
+      url = "gitlab:tiger/ovm/main?host=gitlab.lre.epita.fr";
+    };
   };
 
-  outputs =
-    {
-      self,
-      nixpkgs,
-      home-manager,
-      ...
-    }@inputs:
-    let
-      forAllSystems = nixpkgs.lib.genAttrs [
-        "x86_64-linux"
-      ];
-    in
-    {
-      packages = forAllSystems (
-        system:
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    ...
+  } @ inputs: let
+    forAllSystems = nixpkgs.lib.genAttrs [
+      "x86_64-linux"
+    ];
+  in {
+    packages = forAllSystems (
+      system:
         {
           nixvim = inputs.nixvim.packages.${system}.default;
           home-manager = home-manager.packages.${system}.default;
         }
         // (import ./pkgs nixpkgs.legacyPackages.${system})
-      );
+    );
 
-      overlays = import ./overlays { inherit (self) inputs outputs; };
+    overlays = import ./overlays {inherit (self) inputs outputs;};
 
-      nixosModules = import ./modules/nixos;
+    nixosModules = import ./modules/nixos;
 
-      homeManagerModules = import ./modules/home-manager;
+    homeManagerModules = import ./modules/home-manager;
 
-      nixosConfigurations = import ./hosts { inherit (self) inputs outputs; };
+    nixosConfigurations = import ./hosts {inherit (self) inputs outputs;};
 
-      homeConfigurations = import ./homes { inherit (self) inputs outputs; };
+    homeConfigurations = import ./homes {inherit (self) inputs outputs;};
 
-      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
-    };
+    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+  };
 }

@@ -2,11 +2,9 @@
   pkgs,
   config,
   ...
-}:
-let
+}: let
   bemenu-command = "${pkgs.bemenu}/bin/bemenu-run --ab '##24273a' --af '##cad3f5' --fb '##24273a' --ff '##cad3f5' --hb '##24273a' --hf '##eed49f' --nb '##24273a' --nf '##cad3f5' --tb '##24273a' --tf '##ed8796' --binding vim --cw 15 --fn 'IosevkaTerm Nerd Font 14' --hp 10 --ignorecase --line-height 42 --prompt '  ' --vim-esc-exits --wrap";
-in
-{
+in {
   wayland.windowManager.hyprland = {
     enable = true;
     # package = inputs.hyprland.packages.${pkgs.system}.hyprland;
@@ -82,27 +80,25 @@ in
         ]
         ++ (builtins.concatLists (
           builtins.genList (
-            i:
-            let
+            i: let
               ws = i + 1;
-            in
-            [
+            in [
               "$mod, code:1${toString i}, workspace, ${toString ws}"
               "$mod SHIFT, code:1${toString i}, movetoworkspace, ${toString ws}"
             ]
-          ) 10
+          )
+          10
         ))
         ++ (builtins.concatLists (
           builtins.genList (
-            i:
-            let
+            i: let
               ws = i + 6;
-            in
-            [
+            in [
               "$ALT, code:1${toString i}, workspace, ${toString ws}"
               "$ALT SHIFT, code:1${toString i}, movetoworkspace, ${toString ws}"
             ]
-          ) 5
+          )
+          5
         ));
 
       workspace =
@@ -110,25 +106,23 @@ in
         ]
         ++ (builtins.concatLists (
           builtins.genList (
-            i:
-            let
+            i: let
               ws = i + 1;
-            in
-            [
+            in [
               "${toString ws}, monitor:eDP-1"
             ]
-          ) 5
+          )
+          5
         ))
         ++ (builtins.concatLists (
           builtins.genList (
-            i:
-            let
+            i: let
               ws = i + 6;
-            in
-            [
+            in [
               "${toString ws}, monitor:HDMI-A-1"
             ]
-          ) 5
+          )
+          5
         ));
 
       bindm = [
@@ -208,7 +202,7 @@ in
   services.hyprpaper = {
     enable = true;
     settings = {
-      preload = [ config.windowManager.wallpaper ];
+      preload = [config.windowManager.wallpaper];
       wallpaper = [
         ", ${config.windowManager.wallpaper}"
       ];

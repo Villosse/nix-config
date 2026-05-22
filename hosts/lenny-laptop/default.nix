@@ -3,24 +3,24 @@
   stateVersion,
   outputs,
   ...
-}:
-{
-  imports = [
-    ./hardware.nix
-    ./pkgslist.nix
-    ./graphics.nix
-    ./users.nix
-    ./boot.nix
-    ./virtualisation.nix
-    ./networking.nix
-    ./portals.nix
-    ../common/system/grub
-    ../common/system/sddm
-    ../common/system/pipewire
-    ../common/system/plymouth
-    ../common/games/steam
-  ]
-  ++ (builtins.attrValues outputs.nixosModules);
+}: {
+  imports =
+    [
+      ./hardware.nix
+      ./pkgslist.nix
+      ./graphics.nix
+      ./users.nix
+      ./boot.nix
+      ./virtualisation.nix
+      ./networking.nix
+      ./portals.nix
+      ../common/system/grub
+      ../common/system/sddm
+      ../common/system/pipewire
+      ../common/system/plymouth
+      ../common/games/steam
+    ]
+    ++ (builtins.attrValues outputs.nixosModules);
 
   nix.package = pkgs.nixVersions.latest;
 

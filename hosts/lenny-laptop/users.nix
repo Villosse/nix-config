@@ -3,8 +3,7 @@
   username,
   config,
   ...
-}:
-{
+}: {
   users.users = {
     "${username}" = {
       isNormalUser = true;
@@ -25,7 +24,7 @@
       isNormalUser = true;
       shell = pkgs.zsh;
       uid = 5000;
-      extraGroups = [ config.users.groups.users.name ];
+      extraGroups = [config.users.groups.users.name];
     };
   };
 }

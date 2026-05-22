@@ -24,10 +24,9 @@ stdenvNoCC.mkDerivation {
     qtdeclarative
   ];
 
-  installPhase =
-    let
-      basePath = "$out/share/sddm/themes/sddm-theme-corners/";
-    in
+  installPhase = let
+    basePath = "$out/share/sddm/themes/sddm-theme-corners/";
+  in
     ''
       mkdir -p ${basePath}
       cp -R ./corners/* ${basePath}

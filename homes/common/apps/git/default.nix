@@ -3,11 +3,9 @@
   config,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.programs.git;
-in
-{
+in {
   config = mkIf cfg.enable {
     programs.git.settings = {
       init.defaultBranch = mkDefault "master";

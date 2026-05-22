@@ -2,12 +2,10 @@
   inputs,
   outputs,
   ...
-}:
-let
+}: let
   inherit (inputs) home-manager;
   rootPath = ../.;
-in
-{
+in {
   home-manager.useGlobalPkgs = true;
   "lenny@laptop" = home-manager.lib.homeManagerConfiguration {
     pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
@@ -22,5 +20,4 @@ in
       ./lenny-laptop
     ];
   };
-
 }

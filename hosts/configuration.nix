@@ -2,8 +2,7 @@
   pkgs,
   outputs,
   ...
-}:
-{
+}: {
   nixpkgs = {
     config = {
       allowUnfree = true;
@@ -49,9 +48,9 @@
     enable = true;
   };
 
-  environment.shells = with pkgs; [ zsh ];
+  environment.shells = with pkgs; [zsh];
 
-environment.variables = {
+  environment.variables = {
     TERMINAL = "alacritty";
     EDITOR = "vim";
     VISUAL = "vim";

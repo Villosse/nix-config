@@ -1,8 +1,7 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   boot = {
     kernelPackages = pkgs.linuxPackages;
-    kernelParams = [ "acpi_osi=Linux" ];
+    kernelParams = ["acpi_osi=Linux"];
     loader = {
       timeout = null;
       efi.canTouchEfiVariables = true;

@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   nixpkgs.overlays = [
     (final: prev: {
       my-scripts = {

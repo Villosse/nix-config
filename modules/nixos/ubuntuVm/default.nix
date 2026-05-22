@@ -5,8 +5,7 @@
   username,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.ubuntuVm;
 
   monitorSock = "/tmp/stm32-vm-monitor.sock";
@@ -223,8 +222,7 @@ let
       *)          usage ;;
     esac
   '';
-in
-{
+in {
   options.ubuntuVm = {
     enable = mkEnableOption "Ubuntu VM for STM32 development";
 

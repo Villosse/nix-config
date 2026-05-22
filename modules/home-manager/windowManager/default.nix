@@ -4,11 +4,9 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.windowManager;
-in
-{
+in {
   options.windowManager = {
     wallpaper = mkOption {
       type = types.nullOr types.path;

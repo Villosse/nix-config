@@ -4,16 +4,14 @@
   pkgs,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.displayManager;
-in
-{
+in {
   options.displayManager = {
     theme = mkOption {
-        type = types.nullOr types.package;
-        description = "Display manager theme";
-        default = null;
+      type = types.nullOr types.package;
+      description = "Display manager theme";
+      default = null;
     };
 
     i3.enable = mkOption {
@@ -33,7 +31,6 @@ in
       description = "Enable sway as window manager";
       default = false;
     };
-
   };
 
   config = mkIf (cfg.theme != null) {
@@ -45,6 +42,6 @@ in
         kdePackages.qtvirtualkeyboard
       ];
     };
-    environment.systemPackages = [ cfg.theme ];
+    environment.systemPackages = [cfg.theme];
   };
 }

@@ -3,11 +3,9 @@
   config,
   ...
 }:
-with lib;
-let
+with lib; let
   cfg = config.natHotspot;
-in
-{
+in {
   options.natHotspot = {
     enable = mkEnableOption "NAT hotspot (share wifi over ethernet/switch)";
 
@@ -56,11 +54,11 @@ in
 
   config = mkIf cfg.enable {
     # Tell NetworkManager to leave the internal interface alone
-    networking.networkmanager.unmanaged = [ cfg.internalInterface ];
+    networking.networkmanager.unmanaged = [cfg.internalInterface];
 
     networking.nat = {
       enable = true;
-      internalInterfaces = [ cfg.internalInterface ];
+      internalInterfaces = [cfg.internalInterface];
       externalInterface = cfg.externalInterface;
     };
 
@@ -70,7 +68,7 @@ in
     systemd.services.systemd-networkd-wait-online.enable = lib.mkForce false;
     systemd.network.networks."10-${cfg.internalInterface}" = {
       matchConfig.Name = cfg.internalInterface;
-      address = [ "${cfg.gatewayAddress}/${toString cfg.prefixLength}" ];
+      address = ["${cfg.gatewayAddress}/${toString cfg.prefixLength}"];
       linkConfig.RequiredForOnline = "no";
       networkConfig.ConfigureWithoutCarrier = true;
     };
@@ -80,8 +78,8 @@ in
       settings = {
         port = 0;
         interface = cfg.internalInterface;
-        dhcp-range = [ "${cfg.dhcpRangeStart},${cfg.dhcpRangeEnd},${cfg.dhcpLeaseTime}" ];
-        dhcp-option = [ "option:dns-server,8.8.8.8,8.8.4.4" ];
+        dhcp-range = ["${cfg.dhcpRangeStart},${cfg.dhcpRangeEnd},${cfg.dhcpLeaseTime}"];
+        dhcp-option = ["option:dns-server,8.8.8.8,8.8.4.4"];
       };
     };
 

@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   imports = [
     ./starship.nix
   ];
@@ -18,15 +17,15 @@
         file = "share/zsh/plugins/zsh-you-should-use/you-should-use.plugin.zsh";
       }
       /*
-        {
-          name = "you-should-use";
-          src = pkgs.fetchFromGitHub {
-            owner = "MichaelAquilina";
-            repo = "zsh-you-should-use";
-            rev = "030ac861f5f1536747407ac7baf208fd3990602a";
-            sha256 = "0gx7gs5ds35vw15ygp98m6v8ryzgd1b57fwwn60zf4svpka43xc8";
-          };
-        }
+      {
+        name = "you-should-use";
+        src = pkgs.fetchFromGitHub {
+          owner = "MichaelAquilina";
+          repo = "zsh-you-should-use";
+          rev = "030ac861f5f1536747407ac7baf208fd3990602a";
+          sha256 = "0gx7gs5ds35vw15ygp98m6v8ryzgd1b57fwwn60zf4svpka43xc8";
+        };
+      }
       */
     ];
 

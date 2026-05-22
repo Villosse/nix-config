@@ -3,8 +3,7 @@
   config,
   inputs,
   ...
-}:
-let
+}: let
   cfg = config.windowManager;
 
   bemenu-launcher = pkgs.writeShellScriptBin "bemenu-launcher" ''
@@ -29,8 +28,7 @@ let
       --vim-esc-exits \
       --wrap
   '';
-in
-{
+in {
   imports = [
     inputs.mango.hmModules.mango
   ];

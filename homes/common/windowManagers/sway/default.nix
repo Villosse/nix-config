@@ -3,8 +3,7 @@
   config,
   lib,
   ...
-}:
-let
+}: let
   cfg = config.windowManager;
   mod = "Mod4";
 
@@ -30,13 +29,12 @@ let
       --vim-esc-exits \
       --wrap
   '';
-in
-{
+in {
   wayland.windowManager.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
     xwayland = true;
-    extraOptions = [ "--unsupported-gpu" ];
+    extraOptions = ["--unsupported-gpu"];
 
     extraSessionCommands = ''
       export NIXOS_OZONE_WL=1
@@ -60,18 +58,18 @@ in
     config = {
       modifier = mod;
       terminal = "${pkgs.ghostty}/bin/ghostty";
-      bars = [ ];
+      bars = [];
 
       startup = [
         {
           command = "${pkgs.dbus}/bin/dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway";
         }
-        { command = "${pkgs.xdg-desktop-portal-wlr}/libexec/xdg-desktop-portal-wlr"; }
-        { command = "${pkgs.swaynotificationcenter}/bin/swaync"; }
-        { command = "${pkgs.wl-clip-persist}/bin/wl-clip-persist --clipboard regular --reconnect-tries 0"; }
-        { command = "${pkgs.lxqt.lxqt-policykit}/bin/lxqt-policykit-agent"; }
-        { command = "${pkgs.waybar}/bin/waybar"; }
-        { command = "${pkgs.wpaperd}/bin/wpaperd"; }
+        {command = "${pkgs.xdg-desktop-portal-wlr}/libexec/xdg-desktop-portal-wlr";}
+        {command = "${pkgs.swaynotificationcenter}/bin/swaync";}
+        {command = "${pkgs.wl-clip-persist}/bin/wl-clip-persist --clipboard regular --reconnect-tries 0";}
+        {command = "${pkgs.lxqt.lxqt-policykit}/bin/lxqt-policykit-agent";}
+        {command = "${pkgs.waybar}/bin/waybar";}
+        {command = "${pkgs.wpaperd}/bin/wpaperd";}
       ];
 
       # Catppuccin Macchiato colors
@@ -122,7 +120,7 @@ in
       };
 
       fonts = {
-        names = [ "IosevkaTerm Nerd Font" ];
+        names = ["IosevkaTerm Nerd Font"];
         size = 10.0;
       };
 

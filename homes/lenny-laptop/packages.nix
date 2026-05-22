@@ -1,5 +1,9 @@
-{ pkgs, inputs, ... }:
 {
+  pkgs,
+  inputs,
+  ovm,
+  ...
+}: {
   home.packages = with pkgs; [
     inputs.nixvim.packages.x86_64-linux.default
     nodejs_20
@@ -8,5 +12,6 @@
     obsidian
     docker-compose
     discord
+    ovm
   ];
 }
