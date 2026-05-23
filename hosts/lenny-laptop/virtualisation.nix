@@ -1,6 +1,9 @@
 {pkgs, ...}: {
   virtualisation = {
-    docker.enable = true;
+    docker = {
+      enable = true;
+      enableOnBoot = false;
+    };
     libvirtd.enable = true;
   };
 

@@ -184,6 +184,14 @@ tooltip {
   padding: 2px 12px;
 }
 
+#custom-gpu {
+  color: #24273a;
+  background: #f4dbd6;
+  border-radius: 10px;
+  margin: 5px 4px;
+  padding: 2px 12px;
+}
+
 #battery {
   color: #24273a;
   background: #c6a0f6;
@@ -233,6 +241,7 @@ tooltip {
 #cpu:hover,
 #temperature:hover,
 #memory:hover,
+#custom-gpu:hover,
 #battery:hover,
 #custom-power:hover {
   background: #5b6078;

@@ -27,6 +27,21 @@
     mantle = "1e2030";
     crust = "181926";
   };
+  gpuScript = pkgs.writeShellScript "waybar-gpu" ''
+    nvidia_usage=$(nvidia-smi --query-gpu=utilization.gpu,temperature.gpu --format=csv,noheader,nounits 2>/dev/null)
+    if [ -n "$nvidia_usage" ]; then
+      usage=$(echo "$nvidia_usage" | cut -d',' -f1 | tr -d ' ')
+      temp=$(echo "$nvidia_usage" | cut -d',' -f2 | tr -d ' ')
+      echo "GPU ''${usage}% ''${temp}C"
+    else
+      temp=$(cat /sys/class/drm/card1/device/hwmon/hwmon*/temp1_input 2>/dev/null | head -1)
+      if [ -n "$temp" ]; then
+        echo "GPU $((temp / 1000))C"
+      else
+        echo ""
+      fi
+    fi
+  '';
 in {
   programs.waybar.enable = true;
   programs.waybar.settings = {
@@ -54,6 +69,7 @@ in {
         "cpu"
         "temperature"
         "memory"
+        "custom/gpu"
         "battery"
         "custom/power"
       ];
@@ -119,19 +135,18 @@ in {
         };
       };
 
-      # Notification module
       "custom/notification" = {
         tooltip = false;
         format = "{icon}";
         format-icons = {
           notification = "󰂚 ";
-          none = " ";
+          none = " ";
           dnd-notification = "󰂛 ";
-          dnd-none = " ";
+          dnd-none = " ";
           inhibited-notification = "󰂚 ";
-          inhibited-none = " ";
+          inhibited-none = " ";
           dnd-inhibited-notification = "󰂚 ";
-          dnd-inhibited-none = " ";
+          dnd-inhibited-none = " ";
         };
         return-type = "json";
         exec-if = "which ${pkgs.swaynotificationcenter}/bin/swaync-client";
@@ -150,14 +165,14 @@ in {
       pulseaudio = {
         tooltip = false;
         scroll-step = 2;
-        format = "{icon} {volume:3}%";
-        format-muted = "  {volume:3}%";
+        format = "{icon} {volume}%";
+        format-muted = "  {volume}%";
         on-click = "pactl set-sink-mute @DEFAULT_SINK@ toggle";
         format-icons = {
           default = [
-            " "
-            " "
-            " "
+            " "
+            " "
+            " "
           ];
         };
       };
@@ -182,7 +197,7 @@ in {
       backlight = {
         device = "amdgpu_bl2";
         interval = 2;
-        format = "{icon} {percent:3}%";
+        format = "{icon} {percent}%";
         format-icons = [
           "󱩎 "
           "󱩏 "
@@ -207,20 +222,20 @@ in {
           critical = 20;
         };
         format = "{icon} {capacity}%";
-        format-charging = " {capacity}%";
-        format-plugged = " {capacity}%";
+        format-charging = " {capacity}%";
+        format-plugged = " {capacity}%";
         format-alt = "{time} {icon}";
         format-icons = [
-          " "
-          " "
-          " "
-          " "
-          " "
+          " "
+          " "
+          " "
+          " "
+          " "
         ];
       };
 
       clock = {
-        format = "{:%H:%M    %d/%m/%Y}";
+        format = "{:%H:%M    %d/%m/%Y}";
         tooltip-format = "<tt><small>{calendar}</small></tt>";
         calendar = {
           mode = "year";
@@ -250,22 +265,28 @@ in {
 
       cpu = {
         interval = 2;
-        format = "󰍛 {usage:3}%";
-        max-length = 10;
+        format = "CPU {usage}%";
+        max-length = 8;
       };
 
       temperature = {
-        format = "{temperatureC:2}°C ";
+        format = "{temperatureC}C ";
       };
 
       memory = {
-        interval = 30;
-        format = " {percentage:3}%";
-        max-length = 10;
+        interval = 5;
+        format = "RAM {percentage}%";
+        max-length = 8;
+      };
+
+      "custom/gpu" = {
+        interval = 3;
+        exec = "${gpuScript}";
+        format = "{}";
       };
 
       "custom/launcher" = {
-        format = " ";
+        format = " ";
         on-click = "${pkgs.bemenu}/bin/bemenu-run";
       };
 
