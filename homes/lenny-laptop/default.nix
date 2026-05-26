@@ -27,7 +27,7 @@
       ../common/windowManagers/sway
 
       ../common/widgets/gtk
-      ../common/widgets/waybar
+      ../common/widgets/quickshell
       ../common/widgets/wlogout
     ]
     ++ (builtins.attrValues outputs.homeManagerModules);
@@ -65,6 +65,8 @@
       transform = 0;
     };
   };
+
+  windowManager.fnKeys.enable = true;
 
   services.ssh-agent.enable = true;
   programs.home-manager.enable = true;

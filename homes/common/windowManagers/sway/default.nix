@@ -30,6 +30,8 @@
       --wrap
   '';
 in {
+  imports = [./fn-keys.nix];
+
   wayland.windowManager.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
@@ -68,7 +70,6 @@ in {
         {command = "${pkgs.swaynotificationcenter}/bin/swaync";}
         {command = "${pkgs.wl-clip-persist}/bin/wl-clip-persist --clipboard regular --reconnect-tries 0";}
         {command = "${pkgs.lxqt.lxqt-policykit}/bin/lxqt-policykit-agent";}
-        {command = "${pkgs.waybar}/bin/waybar";}
         {command = "${pkgs.wpaperd}/bin/wpaperd";}
       ];
 
@@ -106,7 +107,7 @@ in {
 
       gaps = {
         inner = 5;
-        outer = 10;
+        outer = 0;
       };
 
       window = {
@@ -251,7 +252,7 @@ in {
         # Gaps
         "Alt+Shift+x" = "gaps inner current plus 1";
         "Alt+Shift+z" = "gaps inner current minus 1";
-        "Alt+Shift+r" = "gaps inner current set 5, gaps outer current set 10";
+        "Alt+Shift+r" = "gaps inner current set 5, gaps outer current set 0";
       };
     };
 

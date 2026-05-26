@@ -38,6 +38,10 @@ in {
       default = pkgs.alacritty;
     };
 
+    fnKeys = {
+      enable = mkEnableOption "Fn keys bindings (volume, brightness) with instant bar feedback";
+    };
+
     primaryDisplay = {
       port = mkOption {
         type = types.str;

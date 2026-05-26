@@ -17,6 +17,16 @@
     tmp.cleanOnBoot = true;
   };
 
+  systemd.services.bluetooth-unblock = {
+    description = "Unblock bluetooth via rfkill";
+    wantedBy = ["bluetooth.service"];
+    before = ["bluetooth.service"];
+    serviceConfig = {
+      Type = "oneshot";
+      ExecStart = "/run/current-system/sw/bin/rfkill unblock bluetooth";
+    };
+  };
+
   # Compressed swap — reduces RAM pressure without a swap partition
   zramSwap = {
     enable = true;
