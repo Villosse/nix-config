@@ -32,7 +32,9 @@ Rectangle {
   Process {
     id: audioProc
     command: ["sh", "-c", "pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\\d+(?=%)' | head -1; pactl get-sink-mute @DEFAULT_SINK@ | awk '{print $2}'"]
+    onRunningChanged: if (running) audioParse.lineIdx = 0
     stdout: SplitParser {
+      id: audioParse
       property int vol: 0
       property int lineIdx: 0
       onRead: data => {
@@ -43,7 +45,6 @@ Rectangle {
           const muted = line === "yes"
           const icon = muted || vol === 0 ? "\u{F026}" : vol < 33 ? "\u{F027}" : vol < 66 ? "\u{F027}" : "\u{F028}"
           audioInfo = `${icon} ${vol}%`
-          lineIdx = -1
         }
         lineIdx++
       }
