@@ -29,12 +29,15 @@
       ../common/widgets/gtk
       ../common/widgets/quickshell
       ../common/widgets/wlogout
+      ../common/apps/ocaml
     ]
     ++ (builtins.attrValues outputs.homeManagerModules);
 
   home.username = username;
   home.homeDirectory = "/home/${username}";
   home.stateVersion = stateVersion;
+
+  languages.ocaml.enable = true;
 
   manual.manpages.enable = false;
   fonts.fontconfig.enable = true;

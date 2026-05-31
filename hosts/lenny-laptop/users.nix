@@ -1,9 +1,22 @@
 {
   pkgs,
   username,
-  config,
   ...
 }: {
+  fileSystems."/home/guest" = {
+    device = "tmpfs";
+    fsType = "tmpfs";
+    options = [
+      "size=2G"
+      "mode=0700"
+      "uid=5000"
+      "gid=100"
+      "nodev"
+      "nosuid"
+      "noexec"
+    ];
+  };
+
   users.users = {
     "${username}" = {
       isNormalUser = true;
@@ -22,9 +35,12 @@
     };
     "guest" = {
       isNormalUser = true;
-      shell = pkgs.zsh;
+      shell = pkgs.bash;
       uid = 5000;
-      extraGroups = [config.users.groups.users.name];
+      home = "/home/guest";
+      initialPassword = "guest";
+      # No extraGroups — keeps guest isolated from other users' home dirs
+      # /home/guest is a tmpfs mount — wiped on every reboot
     };
   };
 }
