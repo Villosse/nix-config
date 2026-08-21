@@ -25,7 +25,6 @@
     ovm = {
       url = "gitlab:tiger/ovm/main?host=gitlab.lre.epita.fr";
     };
-
   };
 
   outputs = {

@@ -27,6 +27,7 @@
   fonts.packages = with pkgs; [
     nerd-fonts.iosevka-term
     rounded-mgenplus
+    fira-sans
   ];
 
   displayManager = {
@@ -44,4 +45,5 @@
   systemd.settings.Manager.RebootWatchdogSec = "0";
 
   system.stateVersion = stateVersion;
+  services.usbmuxd.enable = true;
 }

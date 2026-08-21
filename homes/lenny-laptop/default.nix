@@ -13,6 +13,7 @@
 
       ../common/scripts
 
+      ../common/apps/emacs
       ../common/apps/git
       ../common/apps/cava
       ../common/apps/fzf

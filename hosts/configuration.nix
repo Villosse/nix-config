@@ -20,6 +20,8 @@
     "flakes"
   ];
 
+  nix.settings.trusted-users = ["root" "lenny"];
+
   environment.systemPackages = with pkgs; [
     git
     vim

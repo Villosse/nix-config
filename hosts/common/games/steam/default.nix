@@ -18,8 +18,8 @@ in {
   environment.systemPackages = [
     (pkgs.symlinkJoin {
       name = "heroic";
-      paths = [ pkgs.heroic ];
-      buildInputs = [ pkgs.makeWrapper ];
+      paths = [pkgs.heroic];
+      buildInputs = [pkgs.makeWrapper];
       postBuild = ''
         wrapProgram $out/bin/heroic \
           --set __NV_PRIME_RENDER_OFFLOAD 1 \

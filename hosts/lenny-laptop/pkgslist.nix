@@ -61,6 +61,15 @@
     noto-fonts-color-emoji
     adwaita-icon-theme
     where-is-my-sddm-theme
+
+    direnv
+    devenv
+
+    # VHDL
+    #    quartus-prime-lite
+    #ghdl-llvm
+    #surfer
+    teams-for-linux
   ];
 
   programs = {

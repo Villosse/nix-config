@@ -43,12 +43,14 @@
     sessionVariables = {
       COLORTERM = "truecolor";
       TERM = "xterm-256color";
-      EDITOR = "nvim";
+      EDITOR = "emacsclient -t -a emacs";
     };
 
     shellAliases = rec {
       v = "nvim";
       vim = "nvim";
+      e = "emacsclient -t -a emacs";
+      ec = "emacsclient -c -a emacs";
       ls = "lsd";
       lst = "${ls} --tree";
       tree = "${ls} --tree";
