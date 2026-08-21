@@ -49,8 +49,8 @@
     shellAliases = rec {
       v = "nvim";
       vim = "nvim";
-      e = "emacsclient -t -a emacs";
-      ec = "emacsclient -c -a emacs";
+      e = "emacsclient -t -a emacs"; # terminal frame
+      ec = "emacsclient -c -a emacs"; # GUI frame
       ls = "lsd";
       lst = "${ls} --tree";
       tree = "${ls} --tree";
