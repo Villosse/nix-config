@@ -18,11 +18,6 @@
       url = "github:Villosse/nixvim";
     };
 
-    mango = {
-      url = "github:DreamMaoMao/mangowc";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     ovm = {
       url = "gitlab:tiger/ovm/main?host=gitlab.lre.epita.fr";
     };

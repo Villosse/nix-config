@@ -20,12 +20,6 @@ in {
       default = false;
     };
 
-    maomaowm.enable = mkOption {
-      type = types.bool;
-      description = "Enable maomaowm as window manager";
-      default = false;
-    };
-
     sway.enable = mkOption {
       type = types.bool;
       description = "Enable sway as window manager";
