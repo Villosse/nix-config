@@ -2,12 +2,11 @@
   pkgs,
   config,
   lib,
-  inputs,
   ...
 }: let
   cfg = config.windowManager;
   mod = "Mod4";
-  rio = "${inputs.rio.packages.${pkgs.system}.default}/bin/rio";
+  rio = "${pkgs.rio}/bin/rio";
 
   bemenu-launcher = pkgs.writeShellScriptBin "bemenu-launcher" ''
     exec ${pkgs.bemenu}/bin/bemenu-run \

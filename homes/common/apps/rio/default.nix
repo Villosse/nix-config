@@ -1,13 +1,12 @@
-{
-  inputs,
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
+  imports = [./terminfo.nix];
+
   programs.rio = {
     enable = true;
-    # Build from the flake input so `nix flake update rio` pulls new commits.
-    package = inputs.rio.packages.${pkgs.system}.default;
+    package = pkgs.rio; # prebuilt binary from nixpkgs (no long Rust build)
     settings = {
+      confirm-before-quit = false;
+
       # Match the ghostty look.
       fonts = {
         family = "IosevkaTerm Nerd Font";

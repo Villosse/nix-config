@@ -44,6 +44,9 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file) (load custom-file))
 
+;; Truecolor in the TTY is handled by launching emacsclient with
+;; TERM=xterm-direct (see the `e` alias in zsh); no elisp needed for it.
+
 ;;; Theme + modeline ----------------------------------------------------------
 (use-package catppuccin-theme
   :init
