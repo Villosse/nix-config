@@ -64,6 +64,29 @@
   :init (which-key-mode)
   :custom (which-key-idle-delay 0.3))
 
+;;; Dashboard (startup home screen) -------------------------------------------
+(use-package dashboard
+  :after nerd-icons
+  :init
+  (dashboard-setup-startup-hook)
+  :custom
+  (dashboard-banner-logo-title "Welcome back, Lenny")
+  (dashboard-startup-banner 'logo)          ; use the Emacs logo
+  (dashboard-center-content t)
+  (dashboard-vertically-center-content t)
+  (dashboard-set-heading-icons t)
+  (dashboard-set-file-icons t)
+  (dashboard-icon-type 'nerd-icons)
+  (dashboard-display-icons-p t)
+  (dashboard-projects-backend 'projectile)
+  (dashboard-items '((recents   . 5)
+                     (projects  . 5)
+                     (bookmarks . 5)))
+  :config
+  ;; Show the dashboard for `emacsclient` frames too (daemon), not just the
+  ;; very first Emacs frame.
+  (setq initial-buffer-choice (lambda () (get-buffer-create dashboard-buffer-name))))
+
 ;;; Completion stack (vertico family) -----------------------------------------
 (use-package vertico
   :init (vertico-mode))
@@ -120,6 +143,19 @@
   :init
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-dabbrev))
+
+;;; TTY redraw hardening ------------------------------------------------------
+;; The only remaining terminal ghost is a stale glyph left when the LSP server
+;; pushes diagnostics asynchronously (Emacs' TTY redisplay doesn't repaint the
+;; affected line on its own). `C-l` clears it, but we automate exactly that:
+;; one redraw, fired ONLY when diagnostics actually arrive — not on a timer, so
+;; there is no flicker/strobe. GUI frames (`ec`) are skipped.
+(with-eval-after-load 'eglot
+  (advice-add 'eglot--flymake-report-push+pulled :after
+              (lambda (&rest _)
+                (dolist (frame (frame-list))
+                  (unless (display-graphic-p frame)
+                    (redraw-frame frame))))))
 
 ;;; Editing niceties ----------------------------------------------------------
 (use-package expand-region

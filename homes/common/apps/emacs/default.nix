@@ -17,6 +17,8 @@
         nerd-icons
         rainbow-delimiters
         which-key
+        dashboard # startup splash / home screen
+        page-break-lines # pretty section dividers for dashboard
 
         # Completion stack (vertico family)
         vertico

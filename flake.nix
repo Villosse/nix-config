@@ -23,6 +23,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    rio = {
+      url = "github:raphamorim/rio";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     ovm = {
       url = "gitlab:tiger/ovm/main?host=gitlab.lre.epita.fr";
     };

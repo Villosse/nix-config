@@ -14,7 +14,9 @@
       window-padding-y = 5;
       resize-overlay = "never";
       confirm-close-surface = false;
-      background-opacity = 0.85;
+      # Opaque: a transparent background makes every full terminal repaint
+      # (e.g. Emacs TTY redraw) flash the wallpaper through. 1.0 kills that.
+      background-opacity = 1.0;
       gtk-titlebar = false;
       window-inherit-working-directory = "false";
       working-directory = "home";

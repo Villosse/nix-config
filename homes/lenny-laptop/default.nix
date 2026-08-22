@@ -17,7 +17,7 @@
       ../common/apps/git
       ../common/apps/cava
       ../common/apps/fzf
-      ../common/apps/ghostty
+      ../common/apps/rio
       ../common/apps/tmux
       ../common/apps/zsh
 

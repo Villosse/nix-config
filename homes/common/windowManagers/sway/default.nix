@@ -2,10 +2,12 @@
   pkgs,
   config,
   lib,
+  inputs,
   ...
 }: let
   cfg = config.windowManager;
   mod = "Mod4";
+  rio = "${inputs.rio.packages.${pkgs.system}.default}/bin/rio";
 
   bemenu-launcher = pkgs.writeShellScriptBin "bemenu-launcher" ''
     exec ${pkgs.bemenu}/bin/bemenu-run \
@@ -59,7 +61,7 @@ in {
 
     config = {
       modifier = mod;
-      terminal = "${pkgs.ghostty}/bin/ghostty";
+      terminal = rio;
       bars = [];
 
       startup = [
@@ -164,7 +166,7 @@ in {
       keybindings = lib.mkOptionDefault {
         # Applications
         "${mod}+d" = "exec ${bemenu-launcher}/bin/bemenu-launcher";
-        "${mod}+Return" = "exec ${pkgs.ghostty}/bin/ghostty";
+        "${mod}+Return" = "exec ${rio}";
         "${mod}+x" = "exec ${pkgs.swaylock}/bin/swaylock -i ${cfg.lockscreen} --indicator-radius 100";
         "${mod}+s" = "exec ${pkgs.my-scripts.screenshot}";
 

@@ -42,7 +42,9 @@
 
     sessionVariables = {
       COLORTERM = "truecolor";
-      TERM = "xterm-256color";
+      # TERM is deliberately NOT set here: the terminal emulator (ghostty)
+      # exports its own `xterm-ghostty`, which supports synchronized output
+      # (mode 2026). Forcing `xterm-256color` broke Emacs' atomic TTY repaint.
       EDITOR = "emacsclient -t -a emacs";
     };
 
@@ -64,6 +66,12 @@
 
     initContent = ''
       ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
+      # Only downgrade TERM for a remote host that doesn't know the current one,
+      # so local ghostty keeps its native xterm-ghostty terminfo.
+      if [[ -n "$SSH_CONNECTION" ]] && ! infocmp "$TERM" &>/dev/null; then
+        export TERM=xterm-256color
+      fi
     '';
   };
 }
