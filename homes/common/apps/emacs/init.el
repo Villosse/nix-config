@@ -44,9 +44,6 @@
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file) (load custom-file))
 
-;; Truecolor in the TTY is handled by launching emacsclient with
-;; TERM=xterm-direct (see the `e` alias in zsh); no elisp needed for it.
-
 ;;; Theme + modeline ----------------------------------------------------------
 (use-package catppuccin-theme
   :init
@@ -130,60 +127,10 @@
   :config
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter))
 
-;; In a terminal frame (emacsclient -t), corfu's GUI child-frame popup renders
-;; garbled/duplicated. corfu-terminal draws it as a plain-text overlay instead.
-(use-package corfu-terminal
-  :after corfu
-  :config
-  (unless (display-graphic-p)
-    (corfu-terminal-mode 1))
-  ;; The daemon serves both GUI and TTY frames; toggle per frame on creation.
-  (add-hook 'server-after-make-frame-hook
-            (lambda ()
-              (corfu-terminal-mode (if (display-graphic-p) -1 1)))))
-
 (use-package cape
   :init
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-dabbrev))
-
-;;; TTY redraw hardening ------------------------------------------------------
-;; Since rio's terminfo now advertises Sync (mode 2026), Emacs repaints each
-;; frame atomically, so the old "redraw the whole frame on every diagnostics
-;; push" hack is no longer needed — and it caused a visible full-screen BLINK
-;; while typing. Removed. Only the minibuffer/completion teardown paths (code
-;; actions, corfu popup) can still leave a stale glyph at the bottom; repaint
-;; just those, once, on their single teardown call. GUI frames are skipped.
-;; The eglot code-action picker is a multi-line Vertico popup in the minibuffer
-;; area. When it collapses, Emacs' *incremental* TTY redisplay sometimes decides
-;; the vacated lines are unchanged and skips them -> intermittent stale glyph
-;; (worked "sometimes"). `redraw-display` is diff-based so it inherits the same
-;; skip; the deterministic fix is `redraw-frame`, which clears the frame
-;; unconditionally. Hook it to VERTICO teardown specifically (not every
-;; minibuffer exit) so normal typing never triggers a full clear = no blink.
-;; Deferred to after the popup fully unwinds so the cleared lines stay cleared.
-(defun my/tty-force-repaint (&rest _)
-  "Deterministically clear+repaint every TTY frame after the current command.
-Uses `redraw-frame' (unconditional) rather than `redraw-display' (diff-based,
-which intermittently skips the vacated popup lines). Deferred so the cleared
-lines stay cleared after the popup has fully unwound."
-  (unless (display-graphic-p)
-    (run-at-time 0 nil (lambda ()
-                         (dolist (frame (frame-list))
-                           (unless (display-graphic-p frame)
-                             (redraw-frame frame)))))))
-
-;; Only force the full clear when the minibuffer session actually used Vertico
-;; (the eglot code-action picker does). Plain prompts (y/n, eval) don't, so
-;; ordinary typing/commands never trigger a full-frame clear -> no blink.
-(defun my/tty-repaint-if-vertico ()
-  (when (bound-and-true-p vertico--input)
-    (my/tty-force-repaint)))
-(add-hook 'minibuffer-exit-hook #'my/tty-repaint-if-vertico)
-
-(with-eval-after-load 'corfu
-  ;; After the completion popup is dismissed.
-  (advice-add 'corfu--teardown :after #'my/tty-force-repaint))
 
 ;;; Editing niceties ----------------------------------------------------------
 (use-package expand-region
@@ -252,8 +199,7 @@ lines stay cleared after the popup has fully unwound."
          (markdown-mode    . eglot-ensure)) ; Markdown (via LSP if present)
   :custom
   (eglot-autoshutdown t)
-  ;; Don't let eglot show inline signature/type hints on the code (the source
-  ;; of the terminal redraw corruption). Keep only diagnostics + highlight.
+  ;; Inlay hints clutter the code with `nmemb:` / `size:` style labels; off.
   (eglot-ignored-server-capabilities '(:inlayHintProvider))
   :bind (:map eglot-mode-map
               ("C-c l r" . eglot-rename)
