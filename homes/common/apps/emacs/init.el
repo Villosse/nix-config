@@ -212,9 +212,8 @@
   ;; Typst: tinymist.
   (add-to-list 'eglot-server-programs '((typst-ts-mode) . ("tinymist"))))
 
-;; eldoc renders the LSP hover/signature docs. In a TTY, a tall multi-line
-;; echo-area message corrupts the redraw ("duplicated line + junk on the cursor
-;; line"). Cap it to one line in the echo area and send full docs to a buffer.
+;; eldoc renders the LSP hover/signature docs. Keep the echo area to one line
+;; and send the full docs to the *eldoc* buffer (C-c l d) to avoid clutter.
 (setq eldoc-echo-area-use-multiline-p 1)      ; at most 1 line inline
 (setq eldoc-echo-area-prefer-doc-buffer t)    ; prefer the *eldoc* buffer if shown
 (setq eldoc-idle-delay 0.3)

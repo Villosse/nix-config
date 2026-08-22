@@ -1,9 +1,6 @@
 {pkgs, ...}: {
   programs.emacs = {
     enable = true;
-    # Standard build (not pgtk): its terminal renderer is solid, so `e`
-    # (emacsclient -t) doesn't get the ghost/duplicate-line corruption that
-    # pgtk produces in a TTY. The GUI (`ec`) runs via XWayland — still fine.
     package = pkgs.emacs;
 
     # Packages installed via Nix so they're available to init.el.
@@ -26,7 +23,6 @@
         consult
         marginalia
         corfu
-        corfu-terminal # renders the corfu popup correctly in a TTY (emacsclient -t)
         cape
         nerd-icons-completion
         nerd-icons-corfu
