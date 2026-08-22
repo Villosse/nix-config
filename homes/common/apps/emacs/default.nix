@@ -1,7 +1,10 @@
 {pkgs, ...}: {
   programs.emacs = {
     enable = true;
-    package = pkgs.emacs;
+    # pgtk = native Wayland: alpha-background transparency works (XWayland
+    # doesn't composite it). GUI-only now, so pgtk's old TTY-renderer bug is
+    # irrelevant (terminal editing is vim).
+    package = pkgs.emacs-pgtk;
 
     # Packages installed via Nix so they're available to init.el.
     extraPackages = epkgs:
@@ -71,7 +74,7 @@
     # Launch a GUI Emacs frame off the daemon. Named so bemenu-run (which lists
     # $PATH executables) finds it — search "emacs-gui" in the launcher.
     (writeShellScriptBin "emacs-gui" ''
-      exec ${pkgs.emacs}/bin/emacsclient -c -a emacs "$@"
+      exec ${pkgs.emacs-pgtk}/bin/emacsclient -c -a emacs "$@"
     '')
   ];
 

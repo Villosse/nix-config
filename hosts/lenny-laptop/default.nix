@@ -26,6 +26,10 @@
 
   fonts.packages = with pkgs; [
     nerd-fonts.iosevka-term
+    # Full Nerd Font symbol set ("Symbols Nerd Font Mono") that nerd-icons uses
+    # for its glyphs. IosevkaTerm's patch misses some (e.g. the .nix filetype
+    # icon rendered as tofu); this covers the complete range.
+    nerd-fonts.symbols-only
     rounded-mgenplus
     fira-sans
   ];

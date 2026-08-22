@@ -26,6 +26,20 @@
 ;; so nerd-icons glyphs render in the GUI. Adjust family/height to taste.
 (set-face-attribute 'default nil :family "IosevkaTerm Nerd Font" :height 120)
 
+;; Slightly translucent background for GUI frames (95% opaque). Applied to both
+;; existing and future frames; the daemon serves frames created after startup,
+;; so also set it via `after-make-frame-functions`.
+(setq default-frame-alist (cons '(alpha-background . 85) default-frame-alist))
+(set-frame-parameter nil 'alpha-background 85)
+(add-hook 'after-make-frame-functions
+          (lambda (frame)
+            (when (display-graphic-p frame)
+              (set-frame-parameter frame 'alpha-background 85))))
+
+;; Color emoji as inline images. This pgtk build won't render color-emoji fonts
+;; (tofu boxes), so emojify substitutes images instead — works regardless of
+;; the font/build, the same way emoji "just worked" in the terminal.
+
 ;;; Sane defaults -------------------------------------------------------------
 (setq-default indent-tabs-mode nil)      ; spaces, not tabs
 (setq-default tab-width 2)
@@ -51,7 +65,11 @@
   :config
   (load-theme 'catppuccin :no-confirm))
 
-(use-package nerd-icons)
+(use-package nerd-icons
+  :custom
+  ;; Use the dedicated symbol font (nerd-fonts.symbols-only) so all icons
+  ;; render — IosevkaTerm's Nerd patch misses some (e.g. the .nix filetype icon).
+  (nerd-icons-font-family "Symbols Nerd Font Mono"))
 
 (use-package doom-modeline
   :init (doom-modeline-mode 1)
