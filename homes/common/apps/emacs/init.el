@@ -148,17 +148,42 @@
   (add-to-list 'completion-at-point-functions #'cape-dabbrev))
 
 ;;; TTY redraw hardening ------------------------------------------------------
-;; The only remaining terminal ghost is a stale glyph left when the LSP server
-;; pushes diagnostics asynchronously (Emacs' TTY redisplay doesn't repaint the
-;; affected line on its own). `C-l` clears it, but we automate exactly that:
-;; one redraw, fired ONLY when diagnostics actually arrive — not on a timer, so
-;; there is no flicker/strobe. GUI frames (`ec`) are skipped.
-(with-eval-after-load 'eglot
-  (advice-add 'eglot--flymake-report-push+pulled :after
-              (lambda (&rest _)
-                (dolist (frame (frame-list))
-                  (unless (display-graphic-p frame)
-                    (redraw-frame frame))))))
+;; Since rio's terminfo now advertises Sync (mode 2026), Emacs repaints each
+;; frame atomically, so the old "redraw the whole frame on every diagnostics
+;; push" hack is no longer needed — and it caused a visible full-screen BLINK
+;; while typing. Removed. Only the minibuffer/completion teardown paths (code
+;; actions, corfu popup) can still leave a stale glyph at the bottom; repaint
+;; just those, once, on their single teardown call. GUI frames are skipped.
+;; The eglot code-action picker is a multi-line Vertico popup in the minibuffer
+;; area. When it collapses, Emacs' *incremental* TTY redisplay sometimes decides
+;; the vacated lines are unchanged and skips them -> intermittent stale glyph
+;; (worked "sometimes"). `redraw-display` is diff-based so it inherits the same
+;; skip; the deterministic fix is `redraw-frame`, which clears the frame
+;; unconditionally. Hook it to VERTICO teardown specifically (not every
+;; minibuffer exit) so normal typing never triggers a full clear = no blink.
+;; Deferred to after the popup fully unwinds so the cleared lines stay cleared.
+(defun my/tty-force-repaint (&rest _)
+  "Deterministically clear+repaint every TTY frame after the current command.
+Uses `redraw-frame' (unconditional) rather than `redraw-display' (diff-based,
+which intermittently skips the vacated popup lines). Deferred so the cleared
+lines stay cleared after the popup has fully unwound."
+  (unless (display-graphic-p)
+    (run-at-time 0 nil (lambda ()
+                         (dolist (frame (frame-list))
+                           (unless (display-graphic-p frame)
+                             (redraw-frame frame)))))))
+
+;; Only force the full clear when the minibuffer session actually used Vertico
+;; (the eglot code-action picker does). Plain prompts (y/n, eval) don't, so
+;; ordinary typing/commands never trigger a full-frame clear -> no blink.
+(defun my/tty-repaint-if-vertico ()
+  (when (bound-and-true-p vertico--input)
+    (my/tty-force-repaint)))
+(add-hook 'minibuffer-exit-hook #'my/tty-repaint-if-vertico)
+
+(with-eval-after-load 'corfu
+  ;; After the completion popup is dismissed.
+  (advice-add 'corfu--teardown :after #'my/tty-force-repaint))
 
 ;;; Editing niceties ----------------------------------------------------------
 (use-package expand-region

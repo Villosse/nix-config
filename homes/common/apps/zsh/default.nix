@@ -45,7 +45,7 @@
       # TERM is deliberately NOT set here: the terminal emulator (ghostty)
       # exports its own `xterm-ghostty`, which supports synchronized output
       # (mode 2026). Forcing `xterm-256color` broke Emacs' atomic TTY repaint.
-      EDITOR = "emacsclient -t -a emacs";
+      EDITOR = "nvim"; # TTY editing = vim; GUI Emacs (emacs-gui / ec) for real work
     };
 
     shellAliases = rec {

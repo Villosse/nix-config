@@ -71,12 +71,20 @@
     tinymist # Typst
     pyright # Python
     copilot-language-server # GitHub Copilot agent (used by copilot.el)
+
+    # Launch a GUI Emacs frame off the daemon. Named so bemenu-run (which lists
+    # $PATH executables) finds it — search "emacs-gui" in the launcher.
+    (writeShellScriptBin "emacs-gui" ''
+      exec ${pkgs.emacs}/bin/emacsclient -c -a emacs "$@"
+    '')
   ];
 
   # Single background daemon; `emacsclient` connects instantly.
+  # defaultEditor is false: TTY editing is vim now, GUI Emacs is launched via
+  # `emacs-gui` (bemenu) or the `ec` alias.
   services.emacs = {
     enable = true;
     client.enable = true;
-    defaultEditor = true;
+    defaultEditor = false;
   };
 }

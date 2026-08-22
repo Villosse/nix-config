@@ -10,7 +10,7 @@ in {
     programs.git.settings = {
       init.defaultBranch = mkDefault "master";
       pull.rebase = mkDefault true;
-      core.editor = mkDefault "emacsclient -t -a emacs";
+      core.editor = mkDefault "nvim";
       push.autoSetupRemote = mkDefault true;
 
       color = {
