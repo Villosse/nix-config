@@ -20,6 +20,7 @@
       ../common/apps/rio
       ../common/apps/tmux
       ../common/apps/zsh
+      ../common/apps/direnv
 
       ../common/launchers/bemenu
 
