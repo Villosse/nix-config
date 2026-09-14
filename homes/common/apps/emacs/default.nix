@@ -8,7 +8,7 @@
 }: {
   imports = [
     ./ui.nix # core UI, sane defaults, font, transparency   (order 200)
-    ./theme.nix # theme, modeline, icons, dashboard          (order 300)
+    ./theme.nix # theme, modeline, icons, which-key          (order 300)
     ./completion.nix # vertico family + corfu + cape          (order 500)
     ./editing.nix # expand-region, avy                        (order 500)
     ./vcs.nix # magit, projectile                             (order 500)
