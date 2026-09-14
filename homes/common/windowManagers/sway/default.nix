@@ -107,16 +107,16 @@ in {
       };
 
       gaps = {
-        inner = 5;
+        inner = 0;
         outer = 0;
       };
 
       window = {
-        border = 4;
+        border = 2;
         titlebar = false;
       };
       floating = {
-        border = 4;
+        border = 0;
         titlebar = false;
         modifier = mod;
       };
