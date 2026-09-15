@@ -14,6 +14,7 @@
     ./vcs.nix # magit, projectile                             (order 500)
     ./ai.nix # copilot + copilot-chat                         (order 500)
     ./lsp.nix # eglot + language modes                        (order 500)
+    ./mail.nix # mu4e mail UI                                 (order 500)
   ];
 
   programs.emacs = {

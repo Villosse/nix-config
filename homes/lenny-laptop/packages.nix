@@ -13,6 +13,6 @@
 
     docker-compose
     discord
-        showmethekey
+    showmethekey
   ];
 }

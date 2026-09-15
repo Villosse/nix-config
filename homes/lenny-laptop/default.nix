@@ -2,12 +2,15 @@
   pkgs,
   rootPath,
   outputs,
+  inputs,
   username,
   stateVersion,
   ...
 }: {
   imports =
     [
+      inputs.sops-nix.homeManagerModules.sops
+
       ./nixpkgs.nix
       ./packages.nix
 
@@ -40,6 +43,12 @@
   home.stateVersion = stateVersion;
 
   languages.ocaml.enable = true;
+
+  mail = {
+    enable = true;
+    address = "lenny.chiadmi@gmail.com";
+    realName = "Lenny Chiadmi-Delage";
+  };
 
   manual.manpages.enable = false;
   fonts.fontconfig.enable = true;

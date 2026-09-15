@@ -60,6 +60,11 @@
       :mode "\\.nix\\'")
 
     ;;;; C / C++ — clangd handled by eglot; nothing extra needed (built-in modes).
+    ;; Show a vertical ruler at column 80 (the classic C/C++ line-length limit).
+    (dolist (hook '(c-mode-hook c++-mode-hook c-ts-mode-hook c++-ts-mode-hook))
+      (add-hook hook (lambda ()
+                       (setq-local fill-column 80)
+                       (display-fill-column-indicator-mode 1))))
 
     ;;;; YAML / Markdown
     (use-package yaml-mode)
