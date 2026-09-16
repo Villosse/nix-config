@@ -19,7 +19,15 @@
 
       window = {
         opacity = 0.85;
-        #decorations = "Disabled";
+        # No client-side title bar (sway draws none either).
+        decorations = "Disabled";
+      };
+
+      # No tab strip / app-name bar at the top.
+      navigation = {
+        mode = "Plain";
+        use-terminal-title = false;
+        hide-if-single = true;
       };
 
       padding-x = 5;
