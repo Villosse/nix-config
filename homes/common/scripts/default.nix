@@ -31,7 +31,7 @@
             pkgs="$pkgs nixpkgs#$pkg"
           done
 
-          exec nix shell $pkgs --command zsh
+          exec nix shell $pkgs --command bash
         '';
       };
     })

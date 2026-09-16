@@ -30,7 +30,7 @@
         "kvm"
       ];
       uid = 1000;
-      shell = pkgs.zsh;
+      shell = pkgs.bash;
       ignoreShellProgramCheck = true;
     };
     "guest" = {

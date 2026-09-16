@@ -21,7 +21,7 @@
       ../common/apps/cava
       ../common/apps/fzf
       ../common/apps/rio
-      ../common/apps/tmux
+      ../common/apps/bash
       ../common/apps/zsh
       ../common/apps/direnv
 

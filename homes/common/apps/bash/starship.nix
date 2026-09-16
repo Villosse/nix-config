@@ -1,7 +1,7 @@
 {
   programs.starship = {
     enable = true;
-    enableZshIntegration = true;
+    enableBashIntegration = true;
     settings = {
       palette = "catppuccin_macchiato";
       scan_timeout = 10;

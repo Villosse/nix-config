@@ -1,7 +1,7 @@
 {...}: {
   programs.fzf = {
     enable = true;
-    enableZshIntegration = true;
+    enableBashIntegration = true;
     defaultOptions = ["--style minimal"];
     colors = {
       # bg = "#363a4f";

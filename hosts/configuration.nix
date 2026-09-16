@@ -59,7 +59,7 @@
     enable = true;
   };
 
-  environment.shells = with pkgs; [zsh];
+  environment.shells = with pkgs; [bash zsh];
 
   environment.variables = {
     TERMINAL = "alacritty";
