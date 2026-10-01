@@ -53,7 +53,10 @@
     yaml-language-server # YAML
     tinymist # Typst
     pyright # Python
-    copilot-language-server # GitHub Copilot agent (used by copilot.el)
+    # Not needed by copilot.el (nixpkgs patches `copilot-server-executable' to
+    # this binary's absolute store path, so no $PATH lookup happens). Kept for
+    # interactive use; it's already in the closure via epkgs.copilot, so free.
+    copilot-language-server
 
     # Launch a GUI Emacs frame off the daemon. Named so bemenu-run (which lists
     # $PATH executables) finds it — search "emacs-gui" in the launcher.

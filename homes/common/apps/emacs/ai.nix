@@ -1,45 +1,41 @@
-# GitHub Copilot: inline ghost-text suggestions + chat buffer.
+# GitHub Copilot: inline completion, Next Edit Suggestions, and chat.
+#
+# All three come from the single `copilot' package (0.9.0+), which bundles its
+# own first-party chat. The separate `copilot-chat' package is deliberately NOT
+# installed: both it and the bundled `copilot-chat.el' do `(provide
+# 'copilot-chat)', so installing both makes load order decide the winner (which
+# is what the old load-path hack here was fighting). Pick one -- this is the
+# bundled one, which stays version-locked to copilot.el.
 {lib, ...}: {
   programs.emacs.extraPackages = epkgs:
     with epkgs; [
-      copilot # inline ghost-text suggestions
-      copilot-chat # chat buffer
+      copilot # inline completion + Next Edit Suggestions + chat
     ];
 
   programs.emacs.extraConfig = lib.mkOrder 500 ''
     ;;; GitHub Copilot ------------------------------------------------------------
-    ;; Not enabled by default. Toggle per buffer with `M-x copilot-mode`.
-    ;; The Copilot agent server is provided by Nix (copilot-language-server on
-    ;; PATH), so there's nothing to install — just authenticate once with
-    ;; `M-x copilot-login`.
+    ;; Nothing to install: nixpkgs patches `copilot-server-executable' to the
+    ;; absolute store path of copilot-language-server, so do NOT set it here --
+    ;; overriding it with a bare command name would downgrade a guaranteed store
+    ;; path to a $PATH lookup. Authenticate once with `M-x copilot-login'.
+    ;;
+    ;; Completion keys are NOT bound here: `copilot-completion-map' already binds
+    ;; TAB / <tab> to accept, C-<tab> to accept-by-word, and M-n / M-p to cycle.
+    ;; Re-binding them via `:bind' would also force an eager load at daemon
+    ;; startup, since use-package has to resolve the keymap.
+    ;;
+    ;; Opt-in per buffer with `M-x copilot-mode'. `M-x copilot-nes-mode' adds Next
+    ;; Edit Suggestions (predicts the next edit elsewhere in the file, not just a
+    ;; completion at point); NES does not start or sync the server itself, so it
+    ;; needs `copilot-mode' enabled in the same buffer. `M-x copilot-menu' is a
+    ;; transient covering all of it (transient comes in with magit).
     (use-package copilot
-      :commands (copilot-mode copilot-login)
-      :custom
-      ;; Use the Nix-provided copilot-language-server instead of a downloaded one.
-      (copilot-server-executable "copilot-language-server")
-      :bind (:map copilot-completion-map
-                  ("TAB"   . copilot-accept-completion)
-                  ("<tab>" . copilot-accept-completion)
-                  ("C-TAB" . copilot-accept-completion-by-word)
-                  ("C-<tab>" . copilot-accept-completion-by-word)))
-
-    ;; The `copilot' package (0.5.0) bundles its own stub `copilot-chat.el', which
-    ;; shadows the real standalone `copilot-chat' package (same feature name, so
-    ;; load-order decides the winner). Force the standalone package's directory to
-    ;; the FRONT of load-path so `require' resolves to the real one.
-    (let ((real-copilot-chat
-           (seq-find (lambda (d)
-                       (and (string-match-p "copilot-chat-[0-9]" d)
-                            (file-exists-p (expand-file-name "copilot-chat.el" d))))
-                     load-path)))
-      (when real-copilot-chat
-        (setq load-path (cons real-copilot-chat (delete real-copilot-chat load-path)))))
-
-    (use-package copilot-chat
-      :commands (copilot-chat copilot-chat-display copilot-chat-set-model)
-      :custom
-      ;; Pick a default so the chat has a model on first use (was nil -> no reply).
-      ;; Change via `M-x copilot-chat-set-model` if you want a different one.
-      (copilot-chat-model "gpt-4o"))
+      :commands (copilot-mode
+                 copilot-nes-mode
+                 copilot-login
+                 copilot-menu
+                 copilot-chat
+                 copilot-chat-display
+                 copilot-chat-select-model))
   '';
 }
