@@ -30,6 +30,42 @@
       with epkgs; [
         use-package
         keycast
+
+        # early-init: loaded BEFORE `package-activate-all' (nixpkgs patches
+        # Emacs to load an `early-default' library right after early-init.el).
+        # home-manager's `extraConfig' only writes default.el, which runs AFTER
+        # activation -- too late for these fixes, hence this package. Both are
+        # upstream bugs in other people's files; drop each when fixed there.
+        (trivialBuild {
+          pname = "early-default";
+          version = "1";
+          src = pkgs.writeText "early-default.el" ''
+            ;;; early-default.el --- pre-activation fixes -*- lexical-binding: t; -*-
+
+            ;; typst-ts-mode's generated autoloads inline a
+            ;; `define-compilation-mode' form without requiring `compile' first
+            ;; (unlike typst-ts-compile.el, which does). At package activation
+            ;; the macro is undefined, logging "Error loading autoloads:
+            ;; (void-function define-compilation-mode)". Define it in time.
+            (require 'compile)
+
+            ;; Several OCaml CLI packages (dune, merlin, utop, ...) ship .el
+            ;; files into ~/.nix-profile/share/emacs/site-lisp, which nix's
+            ;; site-start.el puts at the FRONT of `load-path'. Those bare .el
+            ;; copies shadow the properly byte-compiled epkgs versions, and
+            ;; dune.el/dune-flymake.el lack a `lexical-binding' cookie -- so
+            ;; loading dune warned on every startup. Move the profile dir to the
+            ;; BACK so the epkgs .elc wins (no warning, and it is compiled).
+            ;; The profile dir stays on the path as a fallback for tools with no
+            ;; epkgs equivalent (merlin, ocp-indent, utop).
+            (let ((profile-site-lisp
+                   (expand-file-name "~/.nix-profile/share/emacs/site-lisp")))
+              (when (member profile-site-lisp load-path)
+                (setq load-path
+                      (append (delete profile-site-lisp load-path)
+                              (list profile-site-lisp)))))
+          '';
+        })
       ];
 
     # Bootstrap: runs first (order 100) so every topic module's `use-package`

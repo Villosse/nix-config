@@ -53,7 +53,13 @@
     ;;;; OCaml
     (use-package tuareg
       :mode ("\\.mli?\\'" . tuareg-mode))
-    (use-package dune)
+    ;; Deferred on `dune-mode': dune.el registers its own `auto-mode-alist'
+    ;; entry for dune files, so nothing is lost by not loading it at startup.
+    ;; (The load-path reorder in early-default.el is what makes this resolve to
+    ;; the byte-compiled epkgs dune.elc rather than the dune CLI's bare .el,
+    ;; which lacks a `lexical-binding' cookie and warned on load.)
+    (use-package dune
+      :commands (dune-mode))
 
     ;;;; Nix
     (use-package nix-mode
