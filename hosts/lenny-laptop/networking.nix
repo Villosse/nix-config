@@ -2,19 +2,10 @@
   networking.hostName = "lenny-laptop";
   networking.networkmanager.enable = true;
 
-  networking.wg-quick.interfaces.wg0 = {
-    address = ["10.0.0.5/32"];
-    dns = ["1.1.1.1"];
-    privateKey = "yO3X5GzXjzw8xn+wJ/1DF9x88kigdjcWnq5gziehGHY=";
-    peers = [
-      {
-        publicKey = "GjZbc3Jv8casTWtyn2bT9GwBRimarnMfG0Air07pykE=";
-        endpoint = "bastion.assistants.ing.iaas.epita.fr:2222";
-        allowedIPs = ["10.0.0.1/32"];
-        persistentKeepalive = 25;
-      }
-    ];
-  };
+  # Nothing on this host needs the network up before login, and waiting on the
+  # WPA-Enterprise handshake cost ~57s of every boot. NetworkManager still
+  # connects normally in the background.
+  systemd.services.NetworkManager-wait-online.enable = false;
 
   services.openssh.enable = true;
 
