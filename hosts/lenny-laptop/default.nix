@@ -14,7 +14,7 @@
       ./virtualisation.nix
       ./networking.nix
       ./portals.nix
-      ../common/system/grub
+      ./bootloader.nix
       ../common/system/sddm
       ../common/system/pipewire
       ../common/system/plymouth
@@ -47,6 +47,11 @@
   };
 
   systemd.settings.Manager.RebootWatchdogSec = "0";
+
+  services.udev.extraRules = ''
+    ACTION=="add", SUBSYSTEM=="video4linux", ATTR{index}=="0", \
+      RUN+="${pkgs.v4l-utils}/bin/v4l2-ctl -d $devnode --set-ctrl=brightness=10,contrast=65,saturation=75,gamma=380,power_line_frequency=1,backlight_compensation=2,auto_exposure=1,exposure_time_absolute=400"
+  '';
 
   system.stateVersion = stateVersion;
   services.usbmuxd.enable = true;
