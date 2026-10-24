@@ -6,10 +6,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 # Apply home-manager config (most common)
-home-manager switch --flake .#lenny@laptop --refresh
+home-manager switch --flake .#lenny --refresh
 
 # Apply NixOS system config
-sudo nixos-rebuild switch --flake .#lenny-laptop
+sudo nixos-rebuild switch --flake .#laptop
+# NB: the flake attr is `laptop` but networking.hostName is still `lenny-laptop`,
+# so the attr must always be given explicitly — bare `--flake .` will not resolve.
 
 # Format nix files
 nix fmt
@@ -29,7 +31,7 @@ This is a Nix flake managing both NixOS system configs (`nixosConfigurations`) a
 - `hosts/` — NixOS system configurations (hardware, kernel, system packages)
 - `homes/` — home-manager configurations per user/machine
   - `homes/common/` — shared modules imported by all profiles: apps, windowManagers, widgets, scripts
-  - `homes/lenny-laptop/` — machine-specific profile, imports from common + sets display/wallpaper options via `windowManager` option
+  - `homes/lenny/` — the user profile, imports from common; `homes/lenny/displays.nix` holds the machine-specific bits (display ports, scale, wallpaper, lockscreen, Fn keys) via the `windowManager` option
 - `modules/` — custom NixOS and home-manager modules (option declarations)
 - `pkgs/` — custom packages
 - `overlays/` — nixpkgs overlays
@@ -61,7 +63,7 @@ Key facts (gotchas that cost real debugging):
 - **Must be `pkgs.emacs-pgtk`, not `pkgs.emacs`.** GUI transparency (`alpha-background`) only composites on native Wayland; the standard build runs via XWayland where sway won't composite it. `ui.nix` sets `alpha-background 85` on `default-frame-alist` + the current frame + `after-make-frame-functions` (the daemon serves frames created after startup).
 - **LSP servers must be in `home.packages`**, not just an interactive shell — the daemon's PATH is what eglot sees. Servers: ocaml-lsp, nixd, clang-tools (clangd), yaml-language-server, tinymist (typst), pyright.
 - **eglot inlay hints are disabled** (`:inlayHintProvider`) — they cluttered code with `nmemb:` / `size:` style labels.
-- **nerd-icons need the dedicated symbol font.** Install `nerd-fonts.symbols-only` (SYSTEM font, `hosts/lenny-laptop/default.nix` → needs `nixos-rebuild`) AND set `nerd-icons-font-family "Symbols Nerd Font Mono"` in `theme.nix`. IosevkaTerm's Nerd patch is incomplete and renders some icons (e.g. the `.nix` filetype icon) as tofu. IosevkaTerm Nerd Font remains the *default text* face.
+- **nerd-icons need the dedicated symbol font.** Install `nerd-fonts.symbols-only` (SYSTEM font, `hosts/laptop/default.nix` → needs `nixos-rebuild`) AND set `nerd-icons-font-family "Symbols Nerd Font Mono"` in `theme.nix`. IosevkaTerm's Nerd patch is incomplete and renders some icons (e.g. the `.nix` filetype icon) as tofu. IosevkaTerm Nerd Font remains the *default text* face.
 - **No color emoji in GUI — do not add `emojify`.** This pgtk build renders color-emoji fonts (Noto CBDT, Twitter SBIX) as tofu. `emojify` renders emoji as images but does network I/O + a stdin y/n prompt at startup, which crash-loops then freezes the headless daemon. One dashboard-footer emoji shows as a box; that's accepted.
 - **Copilot chat — install exactly one implementation.** copilot.el (0.9.0+) bundles a full first-party `copilot-chat.el`, so the standalone `copilot-chat` package is deliberately **not** installed and `ai.nix` has no `load-path` hack. Both files `(provide 'copilot-chat)`, so adding the separate package back makes load order decide which wins. Also do **not** set `copilot-server-executable`: nixpkgs already patches it to copilot-language-server's absolute store path, and overriding it with a bare name downgrades that to a `$PATH` lookup. Completion keys (TAB, C-<tab>, M-n/M-p) are bound upstream in `copilot-completion-map` — re-binding them via `:bind` forces an eager load at daemon startup.
 - **No temp files:** backups, autosaves, and lockfiles are all disabled in `ui.nix`.

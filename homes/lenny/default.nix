@@ -1,6 +1,5 @@
 {
   pkgs,
-  rootPath,
   outputs,
   inputs,
   username,
@@ -13,6 +12,7 @@
 
       ./nixpkgs.nix
       ./packages.nix
+      ./displays.nix
 
       ../common/scripts
 
@@ -60,27 +60,6 @@
       email = "lenny.chiadmi-delage@epita.fr";
     };
   };
-
-  windowManager = {
-    wallpaper = "${rootPath}/assets/Wallpapers/quotidien.png";
-    lockscreen = "${rootPath}/assets/Wallpapers/guitarGirlOnAtower.png";
-    primaryDisplay = {
-      port = "eDP-1";
-      scale = 1.5;
-      width = 2560;
-      height = 1600;
-      refreshRate = 120;
-    };
-    secondaryDisplay = {
-      port = "HDMI-A-1";
-      scale = 1;
-      x = 1920;
-      y = 0;
-      transform = 0;
-    };
-  };
-
-  windowManager.fnKeys.enable = true;
 
   services.ssh-agent.enable = true;
   programs.home-manager.enable = true;

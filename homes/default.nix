@@ -6,8 +6,7 @@
   inherit (inputs) home-manager;
   rootPath = ../.;
 in {
-  home-manager.useGlobalPkgs = true;
-  "lenny@laptop" = home-manager.lib.homeManagerConfiguration {
+  lenny = home-manager.lib.homeManagerConfiguration {
     pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
     extraSpecialArgs = {
       username = "lenny";
@@ -17,7 +16,7 @@ in {
     };
 
     modules = [
-      ./lenny-laptop
+      ./lenny
     ];
   };
 }

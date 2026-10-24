@@ -3,7 +3,7 @@
   outputs,
   ...
 }: {
-  lenny-laptop = let
+  laptop = let
     username = "lenny";
     stateVersion = "25.05";
   in
@@ -14,7 +14,7 @@
         username = username;
       };
       modules = [
-        ./lenny-laptop
+        ./laptop
         ./configuration.nix
       ];
     };
