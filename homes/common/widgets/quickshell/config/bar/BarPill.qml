@@ -10,6 +10,7 @@ Rectangle {
   property bool bold: true
   property int padding: 24
   property int maxWidth: 0
+  readonly property bool hovered: mouse.containsMouse
   signal clicked
   signal rightClicked
   signal wheel(int delta)
@@ -35,6 +36,7 @@ Rectangle {
   }
 
   MouseArea {
+    id: mouse
     anchors.fill: parent
     acceptedButtons: Qt.LeftButton | Qt.RightButton
     hoverEnabled: true

@@ -9,7 +9,6 @@ BarPill {
   property string conn: ""
 
   text: type === "wifi" ? `󰤨 ${conn}` : type === "ethernet" ? "󰈀" : "󰤯"
-  tooltip: type === "" ? "Disconnected" : `${type === "wifi" ? "Wi-Fi" : "Ethernet"} · ${conn}`
 
   Timer {
     interval: 5000

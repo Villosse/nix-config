@@ -10,7 +10,6 @@ BarPill {
   pillColor: dnd ? Theme.red : Theme.surface0
   textColor: dnd ? Theme.base : Theme.lavender
   text: dnd ? "󰂛" : count > 0 ? `󰂚 ${count}` : "󰂚"
-  tooltip: `${count} notification${count === 1 ? "" : "s"} · DND ${dnd ? "on" : "off"}`
 
   // swaync emits one JSON line per state change: {"text": "<count>", "alt": "[dnd-]notification|none", ...}
   Process {

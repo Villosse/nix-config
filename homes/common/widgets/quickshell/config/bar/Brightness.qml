@@ -11,7 +11,6 @@ BarPill {
   readonly property int pct: maxRaw ? Math.round(currentRaw / maxRaw * 100) : 0
 
   text: `${pct < 25 ? "󰃞" : pct < 50 ? "󰃟" : "󰃠"} ${pct}%`
-  tooltip: `Brightness ${pct}%`
 
   // blocks hardware readback for 1s after last scroll action
   Timer {
