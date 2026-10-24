@@ -22,6 +22,7 @@
       ../common/apps/fzf
       ../common/apps/rio
       ../common/apps/bash
+      ../common/apps/claude
       ../common/apps/zsh
       ../common/apps/direnv
 

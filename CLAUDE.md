@@ -119,6 +119,20 @@ Terminal emulator is **rio** (`homes/common/apps/rio/`), replacing ghostty. Uses
 - **Patched terminfo (`rio/terminfo.nix`).** rio's packaged terminfo lacks `Sync` (mode 2026) and `Tc` (truecolor) even though rio supports both at runtime → caused Emacs TTY ghost lines + washed-out colors. The module compiles a patched `rio` entry (`use=rio` + `Sync` + `Tc`) via `tic -x` and puts it first on `TERMINFO_DIRS`.
 - **Extra keybinds for TUI apps** (`bindings.keys`): Ctrl+Left/Right send `\E[1;5D`/`\E[1;5C` (word motion), Shift+Enter sends `\E\r` (newline in claude-code). Note `with` is a Nix keyword — quote it as `"with"`.
 
+## Claude Code
+
+`homes/common/apps/claude/` enables home-manager's `programs.claude-code`, which puts
+`pkgs.claude-code` on PATH. Before this it was only run from an ad-hoc `nix-shell`.
+
+**Only `enable` is set, deliberately.** The module can also manage `settings`
+(`~/.claude/settings.json`), `context` (`~/.claude/CLAUDE.md`), `skills`, `plugins`,
+`mcpServers` and `lspServers` — but each deploys a read-only store symlink into `~/.claude`,
+which the CLI writes to itself (`/config`, memory, credentials, session state). Two
+consequences if you turn them on: the switch fails on any pre-existing unmanaged file
+(`~/.claude/settings.json` already exists), and `/config` can no longer save. Note
+`settings.json` is only written when `settings != {}`, so a bare `enable = true` touches
+nothing under `~/.claude`.
+
 ## OCaml / OxCaml
 
 Dev toolchain lives in `homes/common/apps/ocaml/default.nix` (option `languages.ocaml.enable`, turned on in the laptop profile). It installs, **globally on PATH**, the OCaml tooling from nixpkgs — `ocaml`, `dune`, `utop`, `merlin` (`ocamlmerlin`), `ocaml-lsp` (`ocamllsp`), `ocamlformat`, `ocp-indent`, `menhir`, `findlib` — plus `opam` and the full native build toolchain (`gcc`, `gnumake`, `pkg-config`, `m4`, `rsync`, `unzip`, `git`, `patch`, `bubblewrap`).
