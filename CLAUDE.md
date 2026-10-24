@@ -124,8 +124,18 @@ Terminal emulator is **rio** (`homes/common/apps/rio/`), replacing ghostty. Uses
 `homes/common/apps/claude/` enables home-manager's `programs.claude-code`, which puts
 `pkgs.claude-code` on PATH. Before this it was only run from an ad-hoc `nix-shell`.
 
-**Only `enable` is set, deliberately.** The module can also manage `settings`
-(`~/.claude/settings.json`), `context` (`~/.claude/CLAUDE.md`), `skills`, `plugins`,
+**Skills are managed and auto-discovered.** Drop a folder
+`homes/common/apps/claude/skills/<name>/` containing a `SKILL.md` (frontmatter `name` +
+`description`) and it is linked as `~/.claude/skills/<name>/` on the next switch — no
+per-skill wiring. This uses the *attrset* form of `skills` (one link per skill), so
+`~/.claude/skills/` stays a real directory and the CLI's own `synced/` skills keep working.
+Never use the *path* form (`skills = ./skills;`): it replaces the whole directory with a
+store symlink. Upstream skills are cherry-picked from pinned `fetchFromGitHub` sources in
+the same module (`avsm/ocaml-claude-marketplace`, `obra/superpowers`) — read a skill before
+adding it to a `pick` list, and bump `rev` + `hash` together to update.
+
+**Everything else is deliberately unset.** The module can also manage `settings`
+(`~/.claude/settings.json`), `context` (`~/.claude/CLAUDE.md`), `plugins`,
 `mcpServers` and `lspServers` — but each deploys a read-only store symlink into `~/.claude`,
 which the CLI writes to itself (`/config`, memory, credentials, session state). Two
 consequences if you turn them on: the switch fails on any pre-existing unmanaged file
