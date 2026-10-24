@@ -1,50 +1,14 @@
 import QtQuick
 import QtQuick.Layouts
-import Quickshell.Io
+import Quickshell.I3
 
 Rectangle {
   id: root
-  required property color surface0
-  required property color surface1
-  required property color mauve
-  required property color lavender
 
-  implicitHeight: 28
-  radius: 12
-  color: surface0
+  implicitHeight: Theme.pillHeight
   implicitWidth: Math.max(row.implicitWidth + 16, 40)
-
-  property var workspaces: []
-  property int focusedNum: 1
-  property string wsBuf: ""
-
-  // Subscribe to workspace events
-  Process {
-    command: ["sh", "-c", "swaymsg -t subscribe '[\"workspace\"]' -m"]
-    running: true
-    stdout: SplitParser {
-      onRead: _ => refreshWorkspaces.running = true
-    }
-  }
-
-  // Fetch workspaces - collect full output then parse
-  Process {
-    id: refreshWorkspaces
-    command: ["sh", "-c", "swaymsg -t get_workspaces"]
-    running: true
-    stdout: SplitParser {
-      onRead: data => root.wsBuf += data
-    }
-    onExited: {
-      try {
-        const wss = JSON.parse(root.wsBuf)
-        root.workspaces = wss.sort((a, b) => a.num - b.num)
-        const fw = wss.find(w => w.focused)
-        if (fw) root.focusedNum = fw.num
-      } catch(e) {}
-      root.wsBuf = ""
-    }
-  }
+  radius: Theme.radius
+  color: Theme.surface0
 
   RowLayout {
     id: row
@@ -52,30 +16,30 @@ Rectangle {
     spacing: 2
 
     Repeater {
-      model: root.workspaces
+      model: Array.from(I3.workspaces.values).sort((a, b) => a.num - b.num)
+
       delegate: Rectangle {
         required property var modelData
+        readonly property bool focused: modelData.focused
+
         implicitWidth: 28
         implicitHeight: 20
         radius: 8
-        color: modelData.num === root.focusedNum ? root.mauve : root.surface1
+        color: focused ? Theme.mauve : modelData.urgent ? Theme.red : Theme.surface1
+        Behavior on color { ColorAnimation { duration: 150 } }
 
         Text {
           anchors.centerIn: parent
           text: String(modelData.num)
-          color: modelData.num === root.focusedNum ? "#24273a" : root.lavender
-          font.family: "IosevkaTerm Nerd Font"
-          font.pixelSize: 13
+          color: focused || modelData.urgent ? Theme.base : Theme.lavender
+          font.family: Theme.font
+          font.pixelSize: Theme.fontSize
           font.bold: true
         }
 
         MouseArea {
           anchors.fill: parent
-          onClicked: wsProc.running = true
-          Process {
-            id: wsProc
-            command: ["swaymsg", "workspace", "number", String(modelData.num)]
-          }
+          onClicked: modelData.activate()
         }
       }
     }

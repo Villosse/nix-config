@@ -1,34 +1,27 @@
 import QtQuick
 import Quickshell.Io
 
-Rectangle {
-  required property color normalColor
-  required property color chargingColor
-  required property color warningColor
-  required property color criticalColor
-  required property color textColor
+BarPill {
+  id: root
 
   property int pct: 100
-  property bool charging: false
+  property string status: ""
+  property real energyNow: 0
+  property real energyFull: 0
+  property real powerNow: 0
+  readonly property bool charging: status === "Charging" || status === "Full"
 
-  implicitHeight: 28
-  implicitWidth: label.implicitWidth + 24
-  radius: 12
-  color: charging ? chargingColor : pct <= 20 ? criticalColor : pct <= 30 ? warningColor : normalColor
-
-  Behavior on color { ColorAnimation { duration: 300 } }
-
-  Text {
-    id: label
-    anchors.centerIn: parent
-    color: textColor
-    font.family: "IosevkaTerm Nerd Font"
-    font.pixelSize: 13
-    font.bold: true
-    text: {
-      const icon = charging ? "\u{F1E6}" : pct >= 90 ? "\u{F240}" : pct >= 70 ? "\u{F241}" : pct >= 40 ? "\u{F242}" : pct >= 20 ? "\u{F243}" : "\u{F244}"
-      return `${icon} ${pct}%`
-    }
+  pillColor: charging ? Theme.green : pct <= 20 ? Theme.red : pct <= 30 ? Theme.yellow : Theme.mauve
+  text: {
+    const icon = charging ? "\u{F1E6}" : pct >= 90 ? "\u{F240}" : pct >= 70 ? "\u{F241}" : pct >= 40 ? "\u{F242}" : pct >= 20 ? "\u{F243}" : "\u{F244}"
+    return `${icon} ${pct}%`
+  }
+  tooltip: {
+    if (powerNow <= 0 || status === "Full") return status
+    const hours = status === "Charging" ? (energyFull - energyNow) / powerNow : energyNow / powerNow
+    const h = Math.floor(hours)
+    const m = String(Math.round((hours - h) * 60)).padStart(2, "0")
+    return `${status} · ${h}h${m} ${status === "Charging" ? "until full" : "left"}`
   }
 
   Timer {
@@ -39,16 +32,19 @@ Rectangle {
     onTriggered: batProc.running = true
   }
 
+  // capacity, energy (or charge) now/full, power (or current) now, status (may contain spaces, so last)
   Process {
     id: batProc
-    command: ["sh", "-c", "cat /sys/class/power_supply/BAT*/capacity 2>/dev/null | head -1; cat /sys/class/power_supply/BAT*/status 2>/dev/null | head -1"]
-    stdout: SplitParser {
-      property int lineIdx: 0
-      onRead: data => {
-        const line = data.trim()
-        if (lineIdx === 0) pct = parseInt(line) || 100
-        else { charging = (line === "Charging" || line === "Full"); lineIdx = -1 }
-        lineIdx++
+    command: ["sh", "-c", "b=$(ls -d /sys/class/power_supply/BAT* | head -1); r() { cat $b/$1 2>/dev/null || cat $b/$2 2>/dev/null || echo 0; }; echo $(r capacity capacity) $(r energy_now charge_now) $(r energy_full charge_full) $(r power_now current_now) $(cat $b/status)"]
+    stdout: StdioCollector {
+      onStreamFinished: {
+        const parts = text.trim().split(" ")
+        if (parts.length < 5) return
+        root.pct = parseInt(parts[0]) || 100
+        root.energyNow = Number(parts[1])
+        root.energyFull = Number(parts[2])
+        root.powerNow = Number(parts[3])
+        root.status = parts.slice(4).join(" ")
       }
     }
   }

@@ -5,36 +5,11 @@ Item {
   required property color ringColor
   required property string icon
   required property int value  // 0-100
+  property string label: value + "%"
   property string tooltip: ""
 
   implicitWidth: 36
   implicitHeight: 36
-
-  property bool hovered: false
-
-  Rectangle {
-    id: tooltipBox
-    visible: hovered && tooltip !== ""
-    anchors.horizontalCenter: parent.horizontalCenter
-    anchors.bottom: parent.top
-    anchors.bottomMargin: 6
-    color: "#24273a"
-    border.color: ringColor
-    border.width: 1
-    radius: 6
-    width: tooltipText.implicitWidth + 16
-    height: tooltipText.implicitHeight + 8
-    z: 100
-
-    Text {
-      id: tooltipText
-      anchors.centerIn: parent
-      text: root.tooltip
-      color: "#cad3f5"
-      font.family: "IosevkaTerm Nerd Font"
-      font.pixelSize: 12
-    }
-  }
 
   Canvas {
     id: canvas
@@ -52,7 +27,7 @@ Item {
 
       ctx.beginPath()
       ctx.arc(cx, cy, r, 0, 2 * Math.PI)
-      ctx.strokeStyle = "#363a4f"
+      ctx.strokeStyle = Theme.surface0
       ctx.lineWidth = 4
       ctx.stroke()
 
@@ -74,15 +49,15 @@ Item {
     Text {
       text: root.icon
       color: root.ringColor
-      font.family: "IosevkaTerm Nerd Font"
+      font.family: Theme.font
       font.pixelSize: 11
       font.bold: true
     }
 
     Text {
-      text: root.value + "%"
+      text: root.label
       color: root.ringColor
-      font.family: "IosevkaTerm Nerd Font"
+      font.family: Theme.font
       font.pixelSize: 11
     }
   }
@@ -90,9 +65,17 @@ Item {
   MouseArea {
     anchors.fill: parent
     hoverEnabled: true
-    onEntered: root.hovered = true
-    onExited: root.hovered = false
+    onEntered: tip.show()
+    onExited: tip.hide()
+  }
+
+  Tooltip {
+    id: tip
+    target: root
+    text: root.tooltip
+    accent: root.ringColor
   }
 
   onValueChanged: canvas.requestPaint()
+  onRingColorChanged: canvas.requestPaint()
 }

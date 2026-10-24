@@ -8,7 +8,7 @@ Rectangle {
   implicitHeight: 36
   implicitWidth: row.implicitWidth + 16
   radius: 12
-  color: "#363a4f"
+  color: Theme.surface0
 
   property int cpuPct: 0
   property string cpuFreq: ""
@@ -17,6 +17,7 @@ Rectangle {
   property string memTotal: ""
   property int gpuPct: 0
   property int gpuTemp: 0
+  property bool gpuOk: false
   property real prevTotal: 0
   property real prevIdle: 0
 
@@ -73,14 +74,16 @@ Rectangle {
     }
   }
 
+  // a failing nvidia-smi (e.g. kernel module older than userspace until reboot) leaves gpuOk false
   Process {
     id: gpuProc
     command: ["sh", "-c", "nvidia-smi --query-gpu=utilization.gpu,temperature.gpu --format=csv,noheader,nounits 2>/dev/null"]
-    stdout: SplitParser {
-      onRead: data => {
-        const parts = data.trim().split(",").map(s => parseInt(s.trim()))
-        if (parts.length >= 2) { root.gpuPct = parts[0]; root.gpuTemp = parts[1] }
-      }
+    stdout: StdioCollector { id: gpuOut }
+    onExited: code => {
+      const parts = gpuOut.text.trim().split(",").map(s => parseInt(s.trim()))
+      root.gpuOk = code === 0 && parts.length >= 2 && !isNaN(parts[0])
+      root.gpuPct = root.gpuOk ? parts[0] : 0
+      root.gpuTemp = root.gpuOk ? parts[1] : 0
     }
   }
 
@@ -92,23 +95,23 @@ Rectangle {
     RingWidget {
       icon: ""
       value: root.cpuPct
-      ringColor: "#f5a97f"
+      ringColor: Theme.peach
       tooltip: root.cpuFreq !== "" ? `CPU ${root.cpuPct}%  ${root.cpuFreq} GHz` : `CPU ${root.cpuPct}%`
     }
 
     RingWidget {
       icon: ""
       value: root.memPct
-      ringColor: "#ed8796"
+      ringColor: Theme.red
       tooltip: root.memUsed !== "" ? `RAM ${root.memUsed} / ${root.memTotal} Go` : `RAM ${root.memPct}%`
     }
 
     RingWidget {
       icon: ""
       value: root.gpuPct
-      ringColor: "#f4dbd6"
-      tooltip: `GPU ${root.gpuPct}%  ${root.gpuTemp}°C`
-      visible: root.gpuPct > 0 || root.gpuTemp > 0
+      ringColor: root.gpuOk ? Theme.rosewater : Theme.surface1
+      label: root.gpuOk ? `${root.gpuPct}%` : "--"
+      tooltip: root.gpuOk ? `GPU ${root.gpuPct}%  ${root.gpuTemp}°C` : "GPU unavailable (driver mismatch? reboot)"
     }
   }
 }

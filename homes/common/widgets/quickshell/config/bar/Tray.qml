@@ -16,7 +16,7 @@ RowLayout {
       implicitWidth: 28
       implicitHeight: 28
       radius: 6
-      color: "#363a4f"
+      color: Theme.surface0
 
       Image {
         anchors.centerIn: parent

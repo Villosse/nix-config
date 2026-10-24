@@ -38,12 +38,18 @@ This is a Nix flake managing both NixOS system configs (`nixosConfigurations`) a
 
 ## Quickshell bar
 
-The bar is managed by `homes/common/widgets/quickshell/`. Config lives in `./config/` (QML files), deployed via `xdg.configFile."quickshell".source = ./config`. Quickshell runs as a systemd user service that auto-restarts when config changes on `home-manager switch` (via `RestartTriggers`).
+The bar is managed by `homes/common/widgets/quickshell/`. Config lives in `./config/` (QML files), deployed via `xdg.configFile."quickshell".source = ./config`. Quickshell runs as a systemd user service that carries `X-Restart-Triggers` on the config path (must be a string: `"${...}"`). As with Emacs, that doesn't reliably restart user units, so run `systemctl --user restart quickshell` after a switch.
 
-- `bar/Bar.qml` — root panel window, defines colors and layout (left/center/right)
-- `bar/SystemRings.qml` — CPU/RAM/GPU ring widgets with polling via `Process`
+- `bar/Bar.qml` — root panel window, layout only (left/center/right)
+- `bar/Theme.qml` — `pragma Singleton` palette (Catppuccin Macchiato), font, pill metrics. Quickshell picks the singleton up without a `qmldir`. Never hardcode hex colours in widgets.
+- `bar/BarPill.qml` — base for every pill (`text`, `tooltip`, `clicked`/`rightClicked`/`wheel(delta)`)
+- `bar/Tooltip.qml` — `PopupWindow` anchored below its target. Tooltips must be popups: anything drawn above y=0 inside the bar is clipped.
+- `bar/SystemRings.qml` — CPU/RAM/GPU rings polled via `Process`. The GPU ring shows `--` when `nvidia-smi` fails, typically "Driver/library version mismatch" after a rebuild bumps the NVIDIA driver without a reboot.
 - `bar/RingWidget.qml` — single ring: arc canvas + icon + percentage inline at center
+- `bar/Notifications.qml` — swaync state via `swaync-client --subscribe-waybar`. Left click toggles DND, right click opens the panel.
+- Workspaces/window title use `Quickshell.I3` / `ToplevelManager`, and audio uses `Quickshell.Services.Pipewire`. No polling for these (Fn volume keys need no refresh hook). Brightness, battery, network and CPU/RAM still poll.
 - All `sh -c` commands in QML need `PATH` set — handled in the systemd service `Environment`
+- Test the working tree without switching: `quickshell -p homes/common/widgets/quickshell/config` (runs a second bar; Ctrl-C to stop)
 
 ## Sway
 
