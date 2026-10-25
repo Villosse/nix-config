@@ -36,6 +36,29 @@ This is a Nix flake managing both NixOS system configs (`nixosConfigurations`) a
 - `pkgs/` — custom packages
 - `overlays/` — nixpkgs overlays
 
+## Disk encryption
+
+Root is LUKS2 (`cryptroot` on `nvme0n1p2`, `aes-xts-plain64`, 512-bit key) holding a btrfs
+volume with subvolumes; configured in `hosts/laptop/hardware.nix`. The passphrase is asked
+in the initrd by systemd-cryptsetup.
+
+**The ~1.5s pause after typing the passphrase is normal** — it's the deliberate argon2id
+key derivation (LUKS2 tunes it to ~1–2s at format time), not a problem. Measured on
+2026-10-25: prompt at 3.8s, passphrase done 8.5s, unlocked 10.0s. `systemd-analyze`'s
+`initrd` figure (~8s) mostly counts typing time. Runtime I/O cost is negligible (the
+Ryzen 7 8845HS has AES-NI). The biggest boot cost is firmware (~8s), unrelated to LUKS.
+
+Check it again with:
+
+```bash
+journalctl -b -o short-monotonic | grep -iE 'password query|cryptroot'
+```
+
+Options if it ever needs to be faster (none applied): lower the PBKDF cost via
+`cryptsetup luksConvertKey` (weakens brute-force resistance — not recommended), or
+enroll the TPM2 (`/dev/tpm0` exists) with `systemd-cryptenroll --tpm2-device=auto`,
+ideally with a PIN.
+
 ## Quickshell bar
 
 The bar is managed by `homes/common/widgets/quickshell/`. Config lives in `./config/` (QML files), deployed via `xdg.configFile."quickshell".source = ./config`. Quickshell runs as a systemd user service that carries `X-Restart-Triggers` on the config path (must be a string: `"${...}"`). As with Emacs, that doesn't reliably restart user units, so run `systemctl --user restart quickshell` after a switch.
