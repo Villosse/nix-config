@@ -7,7 +7,10 @@
     wallpaper = "${rootPath}/assets/Wallpapers/spooky-pixel.png";
     lockscreen = "${rootPath}/assets/Wallpapers/guitarGirlOnAtower.png";
     primaryDisplay = {
-      port = "eDP-1";
+      # Matched by make/model/serial, not "eDP-N": the connector number depends
+      # on which GPU driver registers first at boot. Since the open NVIDIA
+      # modules, the dGPU's (unused) eDP takes eDP-1 and the panel became eDP-2.
+      port = "BOE 0x0C85 Unknown";
       scale = 1.5;
       width = 2560;
       height = 1600;
