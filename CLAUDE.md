@@ -41,7 +41,7 @@ This is a Nix flake managing both NixOS system configs (`nixosConfigurations`) a
 The bar is managed by `homes/common/widgets/quickshell/`. Config lives in `./config/` (QML files), deployed via `xdg.configFile."quickshell".source = ./config`. Quickshell runs as a systemd user service that carries `X-Restart-Triggers` on the config path (must be a string: `"${...}"`). As with Emacs, that doesn't reliably restart user units, so run `systemctl --user restart quickshell` after a switch.
 
 - `bar/Bar.qml` — root panel window, layout only (left/center/right)
-- `bar/Theme.qml` — `pragma Singleton` palette (Catppuccin Macchiato), font, pill metrics. Quickshell picks the singleton up without a `qmldir`. Never hardcode hex colours in widgets.
+- `bar/Theme.qml` — `pragma Singleton` palette (Catppuccin Macchiato, or a chill pixel-art Halloween look when `spooky: true` — DepartureMono Nerd Font, a few spooky widget glyphs; pairs with `assets/Wallpapers/spooky-pixel.png`, set separately in `homes/lenny/displays.nix`), font, pill metrics. Quickshell picks the singleton up without a `qmldir`. Never hardcode hex colours in widgets.
 - `bar/BarPill.qml` — base for every pill (`text`, `tooltip`, `clicked`/`rightClicked`/`wheel(delta)`)
 - `bar/Tooltip.qml` — `PopupWindow` anchored below its target. Tooltips must be popups: anything drawn above y=0 inside the bar is clipped.
 - `bar/SystemRings.qml` — CPU/RAM/GPU rings polled via `Process`. The GPU ring shows `--` when `nvidia-smi` fails, typically "Driver/library version mismatch" after a rebuild bumps the NVIDIA driver without a reboot.

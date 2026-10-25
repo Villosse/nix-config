@@ -9,8 +9,8 @@ BarPill {
   pillColor: Theme.surface0
   textColor: Theme.pink
   bold: false
-  maxWidth: 280
+  maxWidth: 320
   visible: windowTitle !== ""
-  text: windowTitle
+  text: (Theme.spooky ? "\u{F11EA}  " : "") + windowTitle
   tooltip: implicitWidth >= maxWidth ? windowTitle : ""
 }

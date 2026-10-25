@@ -5,9 +5,9 @@ import Quickshell.Io
 Rectangle {
   id: root
 
-  implicitHeight: 36
+  implicitHeight: Theme.pillHeight
   implicitWidth: row.implicitWidth + 16
-  radius: 12
+  radius: Theme.radius
   color: Theme.surface0
 
   property int cpuPct: 0

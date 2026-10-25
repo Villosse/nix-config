@@ -10,7 +10,7 @@ BarPill {
   // pill or popup under the pointer; the grace timer bridges the gap between them
   readonly property bool wanted: hovered || cal.popupHovered
 
-  text: Qt.formatDateTime(now, "HH:mm   dd/MM/yyyy")
+  text: (Theme.spooky ? "\u{F0BBF}  " : "") + Qt.formatDateTime(now, "HH:mm   dd/MM/yyyy")
 
   Timer {
     interval: 1000

@@ -13,15 +13,15 @@ RowLayout {
       id: trayIcon
       required property var modelData
 
-      implicitWidth: 28
-      implicitHeight: 28
-      radius: 6
+      implicitWidth: Theme.pillHeight
+      implicitHeight: Theme.pillHeight
+      radius: Theme.radius
       color: Theme.surface0
 
       Image {
         anchors.centerIn: parent
-        width: 18
-        height: 18
+        width: 20
+        height: 20
         source: modelData.icon
         smooth: true
         mipmap: true

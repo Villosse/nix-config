@@ -9,7 +9,8 @@ BarPill {
 
   pillColor: dnd ? Theme.red : Theme.surface0
   textColor: dnd ? Theme.base : Theme.lavender
-  text: dnd ? "󰂛" : count > 0 ? `󰂚 ${count}` : "󰂚"
+  readonly property string icon: Theme.spooky ? "\u{F02A0}" : "󰂚"
+  text: dnd ? (Theme.spooky ? "\u{F09F5}" : "󰂛") : count > 0 ? `${icon} ${count}` : icon
 
   // swaync emits one JSON line per state change: {"text": "<count>", "alt": "[dnd-]notification|none", ...}
   Process {

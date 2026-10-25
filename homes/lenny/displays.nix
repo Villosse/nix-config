@@ -3,7 +3,8 @@
 # everything in here is the one part that would change on a different machine.
 {rootPath, ...}: {
   windowManager = {
-    wallpaper = "${rootPath}/assets/Wallpapers/quotidien.png";
+    # quotidien.png outside Halloween
+    wallpaper = "${rootPath}/assets/Wallpapers/spooky-pixel.png";
     lockscreen = "${rootPath}/assets/Wallpapers/guitarGirlOnAtower.png";
     primaryDisplay = {
       port = "eDP-1";

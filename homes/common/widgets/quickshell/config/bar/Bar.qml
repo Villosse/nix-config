@@ -6,7 +6,7 @@ import Quickshell.Wayland
 PanelWindow {
   id: root
   anchors { top: true; left: true; right: true }
-  implicitHeight: 46
+  implicitHeight: Theme.pillHeight + 8
   color: "transparent"
   exclusiveZone: implicitHeight
 

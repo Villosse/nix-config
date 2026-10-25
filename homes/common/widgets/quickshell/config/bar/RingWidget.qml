@@ -8,8 +8,8 @@ Item {
   property string label: value + "%"
   property string tooltip: ""
 
-  implicitWidth: 36
-  implicitHeight: 36
+  implicitWidth: Theme.pillHeight
+  implicitHeight: Theme.pillHeight
 
   Canvas {
     id: canvas
@@ -21,21 +21,21 @@ Item {
 
       const cx = width / 2
       const cy = height / 2
-      const r = Math.min(width, height) / 2 - 3
+      const r = Math.min(width, height) / 2 - 2
       const startAngle = -Math.PI / 2
       const endAngle = startAngle + (2 * Math.PI * root.value / 100)
 
       ctx.beginPath()
       ctx.arc(cx, cy, r, 0, 2 * Math.PI)
       ctx.strokeStyle = Theme.surface0
-      ctx.lineWidth = 4
+      ctx.lineWidth = 3
       ctx.stroke()
 
       if (root.value > 0) {
         ctx.beginPath()
         ctx.arc(cx, cy, r, startAngle, endAngle)
         ctx.strokeStyle = root.ringColor
-        ctx.lineWidth = 4
+        ctx.lineWidth = 3
         ctx.lineCap = "round"
         ctx.stroke()
       }

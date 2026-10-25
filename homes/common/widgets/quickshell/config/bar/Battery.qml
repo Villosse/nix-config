@@ -10,7 +10,7 @@ BarPill {
 
   pillColor: charging ? Theme.green : pct <= 20 ? Theme.red : pct <= 30 ? Theme.yellow : Theme.mauve
   text: {
-    const icon = charging ? "\u{F1E6}" : pct >= 90 ? "\u{F240}" : pct >= 70 ? "\u{F241}" : pct >= 40 ? "\u{F242}" : pct >= 20 ? "\u{F243}" : "\u{F244}"
+    const icon = charging ? "\u{F1E6}" : pct >= 90 ? "\u{F240}" : pct >= 70 ? "\u{F241}" : pct >= 40 ? "\u{F242}" : pct >= 20 ? "\u{F243}" : Theme.spooky ? "\u{F068C}" : "\u{F244}"
     return `${icon} ${pct}%`
   }
 

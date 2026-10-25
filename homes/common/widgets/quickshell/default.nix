@@ -3,7 +3,11 @@
   config,
   ...
 }: {
-  home.packages = [pkgs.quickshell];
+  home.packages = [
+    pkgs.quickshell
+    # Theme.font when spooky
+    pkgs.nerd-fonts.departure-mono
+  ];
   xdg.configFile."quickshell".source = ./config;
 
   systemd.user.services.quickshell = {

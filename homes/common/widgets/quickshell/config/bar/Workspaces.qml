@@ -22,15 +22,16 @@ Rectangle {
         required property var modelData
         readonly property bool focused: modelData.focused
 
-        implicitWidth: 28
-        implicitHeight: 20
+        implicitWidth: Math.max(label.implicitWidth + 14, 32)
+        implicitHeight: Theme.pillHeight - 10
         radius: 8
         color: focused ? Theme.mauve : modelData.urgent ? Theme.red : Theme.surface1
         Behavior on color { ColorAnimation { duration: 150 } }
 
         Text {
+          id: label
           anchors.centerIn: parent
-          text: String(modelData.num)
+          text: focused && Theme.spooky ? `\u{F0BA3} ${modelData.num}` : String(modelData.num)
           color: focused || modelData.urgent ? Theme.base : Theme.lavender
           font.family: Theme.font
           font.pixelSize: Theme.fontSize
