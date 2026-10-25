@@ -17,7 +17,7 @@ Rectangle {
   property string memTotal: ""
   property int gpuPct: 0
   property int gpuTemp: 0
-  property bool gpuOk: false
+  property string gpuState: "error" // "on" | "idle" | "off" | "error"
   property real prevTotal: 0
   property real prevIdle: 0
 
@@ -74,16 +74,26 @@ Rectangle {
     }
   }
 
-  // a failing nvidia-smi (e.g. kernel module older than userspace until reboot) leaves gpuOk false
+  // nvidia-smi wakes the dGPU, and polling it every 2s would keep it out of RTD3 forever.
+  // So only query when something other than sway (which always holds it for the HDMI port)
+  // has /dev/nvidiaN open. A failing nvidia-smi (e.g. kernel module older than userspace
+  // until reboot) gives "error".
   Process {
     id: gpuProc
-    command: ["sh", "-c", "nvidia-smi --query-gpu=utilization.gpu,temperature.gpu --format=csv,noheader,nounits 2>/dev/null"]
+    command: ["sh", "-c", "[ \"$(cat /sys/bus/pci/drivers/nvidia/0000:*/power/runtime_status 2>/dev/null)\" = suspended ] && { echo off; exit 0; }; find /proc/[0-9]*/fd -lname '/dev/nvidia[0-9]*' 2>/dev/null | cut -d/ -f3 | sort -u | sed 's|.*|/proc/&/comm|' | xargs -r cat 2>/dev/null | grep -qvx sway || { echo idle; exit 0; }; nvidia-smi --query-gpu=utilization.gpu,temperature.gpu --format=csv,noheader,nounits 2>/dev/null"]
     stdout: StdioCollector { id: gpuOut }
     onExited: code => {
-      const parts = gpuOut.text.trim().split(",").map(s => parseInt(s.trim()))
-      root.gpuOk = code === 0 && parts.length >= 2 && !isNaN(parts[0])
-      root.gpuPct = root.gpuOk ? parts[0] : 0
-      root.gpuTemp = root.gpuOk ? parts[1] : 0
+      const text = gpuOut.text.trim()
+      if (text === "off" || text === "idle") {
+        root.gpuState = text
+        root.gpuPct = 0
+        return
+      }
+      const parts = text.split(",").map(s => parseInt(s.trim()))
+      const ok = code === 0 && parts.length >= 2 && !isNaN(parts[0])
+      root.gpuState = ok ? "on" : "error"
+      root.gpuPct = ok ? parts[0] : 0
+      root.gpuTemp = ok ? parts[1] : 0
     }
   }
 
@@ -109,9 +119,14 @@ Rectangle {
     RingWidget {
       icon: ""
       value: root.gpuPct
-      ringColor: root.gpuOk ? Theme.rosewater : Theme.surface1
-      label: root.gpuOk ? `${root.gpuPct}%` : "--"
-      tooltip: root.gpuOk ? `GPU ${root.gpuPct}%  ${root.gpuTemp}°C` : "GPU unavailable (driver mismatch? reboot)"
+      ringColor: root.gpuState === "on" ? Theme.rosewater : Theme.surface1
+      label: ({ on: `${root.gpuPct}%`, idle: "0%", off: "off", error: "--" })[root.gpuState]
+      tooltip: ({
+        on: `GPU ${root.gpuPct}%  ${root.gpuTemp}°C`,
+        idle: "GPU awake, no app using it",
+        off: "GPU powered off (RTD3)",
+        error: "GPU unavailable (driver mismatch? reboot)"
+      })[root.gpuState]
     }
   }
 }

@@ -6,7 +6,7 @@
 }: let
   cfg = config.windowManager;
   mod = "Mod4";
-  rio = "${pkgs.rio}/bin/rio";
+  rio = "${config.programs.rio.package}/bin/rio";
 
   bemenu-launcher = pkgs.writeShellScriptBin "bemenu-launcher" ''
     exec ${pkgs.bemenu}/bin/bemenu-run \
@@ -46,8 +46,6 @@ in {
       export GDK_BACKEND=wayland,x11
       export SDL_VIDEODRIVER=x11
       export MOZ_ENABLE_WAYLAND=1
-      export LIBVA_DRIVER_NAME=nvidia
-      export __GLX_VENDOR_LIBRARY_NAME=nvidia
       export GTK_IM_MODULE=simple
       export QT_IM_MODULE=fcitx
       export SDL_IM_MODULE=fcitx

@@ -3,9 +3,32 @@
 
   programs.rio = {
     enable = true;
-    package = pkgs.rio; # prebuilt binary from nixpkgs (no long Rust build)
+    # Prebuilt binary from nixpkgs (no long Rust build), wrapped so Vulkan only
+    # sees the AMD iGPU. Even with `performance = "Low"`, wgpu loads the NVIDIA
+    # driver while enumerating adapters and keeps /dev/nvidia0 open, which
+    # stops the dGPU from powering off (RTD3). The GL backend is worse: it
+    # renders on NVIDIA outright.
+    package = pkgs.symlinkJoin {
+      name = "rio";
+      paths = [pkgs.rio];
+      buildInputs = [pkgs.makeWrapper];
+      postBuild = ''
+        wrapProgram $out/bin/rio \
+          --set VK_DRIVER_FILES /run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json
+      '';
+    };
     settings = {
       confirm-before-quit = false;
+
+      # Low-power adapter = the AMD iGPU.
+      renderer.performance = "Low";
+
+      # Drop the wrapper's VK_DRIVER_FILES for the shell, so programs run from
+      # the terminal (nvidia-offload, vulkaninfo, games) still see the dGPU.
+      shell = {
+        program = "${pkgs.coreutils}/bin/env";
+        args = ["-u" "VK_DRIVER_FILES" "/run/current-system/sw/bin/bash"];
+      };
 
       # Extra key bindings that send the escape sequences TUI apps expect.
       bindings.keys = [
