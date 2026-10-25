@@ -30,7 +30,7 @@ This is a Nix flake managing both NixOS system configs (`nixosConfigurations`) a
 - `flake.nix` — entry point, wires inputs (nixpkgs unstable + stable, home-manager, nixvim, ovm) and outputs
 - `hosts/` — NixOS system configurations (hardware, kernel, system packages)
 - `homes/` — home-manager configurations per user/machine
-  - `homes/common/` — shared modules imported by all profiles: apps, windowManagers, widgets, scripts
+  - `homes/common/` — shared modules: apps, windowManagers, widgets, scripts. Only some are imported by the profile; the rest (alacritty, ghostty, hyprland, i3, polybar, waybar, rofi, dunst, mako, …) are kept deliberately so the setup can be switched — they are not dead code. Same for unimported host modules (`hosts/common/system/grub`) and opt-in modules (`natHotspot`, `misc.git`).
   - `homes/lenny/` — the user profile, imports from common; `homes/lenny/displays.nix` holds the machine-specific bits (display ports, scale, wallpaper, lockscreen, Fn keys) via the `windowManager` option
 - `modules/` — custom NixOS and home-manager modules (option declarations)
 - `pkgs/` — custom packages
@@ -53,7 +53,7 @@ The bar is managed by `homes/common/widgets/quickshell/`. Config lives in `./con
 
 ## Sway
 
-Config in `homes/common/windowManagers/sway/default.nix`. The `windowManager` option (defined in `modules/home-manager`) lets each machine profile set display ports, scale, wallpaper, lockscreen. Gaps: `inner=5, outer=0`.
+Config in `homes/common/windowManagers/sway/default.nix`. The `windowManager` option (defined in `modules/home-manager`) lets each machine profile set display ports, scale, wallpaper, lockscreen. Gaps: `inner=0, outer=0` (Alt+Shift+x/z adjust inner gaps live; Alt+Shift+r resets to `inner=5, outer=0`).
 
 ## Emacs
 
@@ -62,7 +62,7 @@ Config in `homes/common/apps/emacs/`:
 - `default.nix` — installs **`pkgs.emacs-pgtk`** (native Wayland), Emacs packages via `extraPackages`, and runs Emacs as a systemd **daemon** (`services.emacs`). Also puts LSP server binaries in `home.packages`, plus an `emacs-gui` wrapper (`emacsclient -c -a emacs`) so bemenu can launch a GUI frame.
 - Per-topic modules — there is **no `init.el`** (it was removed in `b320ed7`). Each module contributes its own `extraPackages` + `extraConfig`, which home-manager merges and concatenates (ordered via `lib.mkOrder`) into one generated `default.el`: `ui.nix` (core UI, font, transparency, temp-file settings — order 200), `theme.nix` (theme, modeline, icons, which-key — 300), then at order 500 `completion.nix`, `editing.nix`, `vcs.nix`, `ai.nix` (Copilot), `lsp.nix`, `mail.nix`.
 
-**Editor split (important):** GUI Emacs is the primary editor for real work; **vim (nvim) is the TTY editor**. The TTY Emacs renderer could never guarantee zero ghost lines on async LSP updates, so terminal editing was abandoned. Wiring: `EDITOR=nvim` in zsh, `core.editor=nvim` in git, `services.emacs.defaultEditor = false`. Launch GUI Emacs via `emacs-gui` (search it in bemenu) or the `ec` alias. The `e` alias (`emacsclient -t`) still exists but is not the default.
+**Editor split (important):** GUI Emacs is the primary editor for real work; **vim (nvim) is the TTY editor**. The TTY Emacs renderer could never guarantee zero ghost lines on async LSP updates, so terminal editing was abandoned. Wiring: `EDITOR=nvim` in bash (the login shell; the zsh module sets it too but is off — `apps.zsh.enable` is unset), `core.editor=nvim` in git, `services.emacs.defaultEditor = false`. Launch GUI Emacs via `emacs-gui` (search it in bemenu) or the `ec` alias. The `e` alias (`emacsclient -t`) still exists but is not the default.
 
 Key facts (gotchas that cost real debugging):
 
@@ -123,7 +123,7 @@ After editing config: `home-manager switch` then `systemctl --user restart emacs
 Terminal emulator is **rio** (`homes/common/apps/rio/`), replacing ghostty. Uses `pkgs.rio` (prebuilt; building from source is slow). Config in `programs.rio.settings` (Catppuccin Macchiato, IosevkaTerm Nerd Font, `opacity = 0.85`, `confirm-before-quit = false` so Mod+Q closes instantly). sway launches it (`Mod+Return`, default `terminal`).
 
 - **Patched terminfo (`rio/terminfo.nix`).** rio's packaged terminfo lacks `Sync` (mode 2026) and `Tc` (truecolor) even though rio supports both at runtime → caused Emacs TTY ghost lines + washed-out colors. The module compiles a patched `rio` entry (`use=rio` + `Sync` + `Tc`) via `tic -x` and puts it first on `TERMINFO_DIRS`.
-- **Extra keybinds for TUI apps** (`bindings.keys`): Ctrl+Left/Right send `\E[1;5D`/`\E[1;5C` (word motion), Shift+Enter sends `\E\r` (newline in claude-code). Note `with` is a Nix keyword — quote it as `"with"`.
+- **No custom keybinds:** `bindings.keys` is currently empty, so Ctrl+Left/Right word motion and Shift+Enter newline (claude-code) use rio's defaults. To add some back, the sequences are `\E[1;5D`/`\E[1;5C` and `\E\r`; note `with` is a Nix keyword — quote it as `"with"`.
 
 ## Claude Code
 
