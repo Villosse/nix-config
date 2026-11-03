@@ -18,6 +18,33 @@
       # (mode 2026). Forcing `xterm-256color` broke Emacs' atomic TTY repaint.
       EDITOR = "nvim"; # TTY editing = vim; GUI Emacs (emacs-gui / ec) for real work
       PGDATA = "$HOME/postgres_data"; # carried over from the pre-Nix ~/.bashrc
+      # newt (nmtui) defaults to cyan/blue windows, unreadable here. Only the 16
+      # ANSI names are accepted; rio maps them to Catppuccin Macchiato.
+      NEWT_COLORS = builtins.concatStringsSep ";" [
+        "root=white,black"
+        "roottext=white,black"
+        "helpline=white,black"
+        "window=white,black"
+        "border=blue,black"
+        "shadow=black,black"
+        "title=brightmagenta,black"
+        "label=white,black"
+        "textbox=white,black"
+        "acttextbox=black,blue"
+        "entry=white,black"
+        "disentry=gray,black"
+        "checkbox=white,black"
+        "actcheckbox=black,blue"
+        "listbox=white,black"
+        "actlistbox=black,blue"
+        "sellistbox=black,brightmagenta"
+        "actsellistbox=black,blue"
+        "button=white,gray"
+        "actbutton=black,blue"
+        "compactbutton=white,black"
+        "emptyscale=,black"
+        "fullscale=,blue"
+      ];
     };
 
     shellAliases = rec {
