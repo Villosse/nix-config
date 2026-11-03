@@ -14,5 +14,7 @@ in
 
       "XF86MonBrightnessDown" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 5%- && touch /tmp/qs-brightness-refresh";
       "XF86MonBrightnessUp" = "exec ${pkgs.brightnessctl}/bin/brightnessctl set 5%+ && touch /tmp/qs-brightness-refresh";
+
+      "XF86TouchpadToggle" = "input type:touchpad events toggle enabled disabled";
     };
   }
