@@ -23,6 +23,7 @@
       ../common/apps/rio
       ../common/apps/bash
       ../common/apps/claude
+      ../common/apps/antigravity
       ../common/apps/zsh
       ../common/apps/direnv
 
