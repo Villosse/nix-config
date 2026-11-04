@@ -90,7 +90,8 @@ Config in `homes/common/apps/emacs/`:
 Key facts (gotchas that cost real debugging):
 
 - **Must be `pkgs.emacs-pgtk`, not `pkgs.emacs`.** GUI transparency (`alpha-background`) only composites on native Wayland; the standard build runs via XWayland where sway won't composite it. `ui.nix` sets `alpha-background 85` on `default-frame-alist` + the current frame + `after-make-frame-functions` (the daemon serves frames created after startup).
-- **LSP servers must be in `home.packages`**, not just an interactive shell — the daemon's PATH is what eglot sees. Servers: ocaml-lsp, nixd, clang-tools (clangd), yaml-language-server, tinymist (typst), pyright.
+- **LSP servers must be in `home.packages`**, not just an interactive shell — the daemon's PATH is what eglot sees. Servers: ocaml-lsp, nixd, clang-tools (clangd), yaml-language-server, tinymist (typst), pyright. coq-lsp (Rocq) comes from `homes/common/apps/rocq/`.
+- **`nix develop` never reaches the daemon.** `ec`, `e` and `emacs-gui` only ask the daemon for a frame, and it keeps the environment it started with. Dev shell tools reach Emacs through `envrc.nix` instead: the project needs a `.envrc` with `use flake`, allowed once with `direnv allow`, and envrc then applies it per buffer (`C-c e` for its commands).
 - **eglot inlay hints are disabled** (`:inlayHintProvider`) — they cluttered code with `nmemb:` / `size:` style labels.
 - **nerd-icons need the dedicated symbol font.** Install `nerd-fonts.symbols-only` (SYSTEM font, `hosts/laptop/default.nix` → needs `nixos-rebuild`) AND set `nerd-icons-font-family "Symbols Nerd Font Mono"` in `theme.nix`. IosevkaTerm's Nerd patch is incomplete and renders some icons (e.g. the `.nix` filetype icon) as tofu. IosevkaTerm Nerd Font remains the *default text* face.
 - **No color emoji in GUI — do not add `emojify`.** This pgtk build renders color-emoji fonts (Noto CBDT, Twitter SBIX) as tofu. `emojify` renders emoji as images but does network I/O + a stdin y/n prompt at startup, which crash-loops then freezes the headless daemon. One dashboard-footer emoji shows as a box; that's accepted.
@@ -183,6 +184,12 @@ opam switch create 5.2.0+ox --repos ox=git+https://github.com/oxcaml/opam-reposi
 ```
 
 but that is a manual, on-demand step — the module only guarantees the *packages needed to compile* are present, not the OxCaml compiler on PATH.
+
+## Rocq
+
+Toolchain lives in `homes/common/apps/rocq/default.nix` (option `languages.rocq.enable`, turned on in the laptop profile): `rocq`, `rocqchk` and `coq-lsp`, wrapped by `rocq-core.withPackages` so they find the stdlib without `ROCQPATH`. Rocq is built on its own OCaml 4.14 set, and the wrapped env's `bin/` also holds tools like `menhir`, so only those three binaries are linked into `home.packages`; don't add the env directly.
+
+In Emacs, `.v` files open in Proof General's `coq-mode`, which finds `rocq` itself and handles stepping and goals. coq-lsp runs alongside through eglot for diagnostics, hover and completion, as eglot can't display its goals. The global coq-lsp is tied to Rocq 9.1, so a project pinned to another version should provide its own in its dev shell.
 
 ## Formatter
 

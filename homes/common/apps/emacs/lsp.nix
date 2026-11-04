@@ -9,6 +9,7 @@
       markdown-mode
       yaml-mode
       typst-ts-mode # Typst
+      proof-general # Rocq
       paredit # structured Lisp editing
       sly # Common Lisp REPL/IDE
       treesit-grammars.with-all-grammars
@@ -26,6 +27,7 @@
              (yaml-mode        . eglot-ensure)  ; YAML
              (yaml-ts-mode     . eglot-ensure)
              (typst-ts-mode    . eglot-ensure)  ; Typst
+             (coq-mode         . eglot-ensure)  ; Rocq
              (python-mode      . eglot-ensure)  ; Python
              (python-ts-mode   . eglot-ensure)
              (markdown-mode    . eglot-ensure)) ; Markdown (via LSP if present)
@@ -42,7 +44,9 @@
       ;; Nix: use nixd (nixd is on PATH via home.packages).
       (add-to-list 'eglot-server-programs '((nix-mode) . ("nixd")))
       ;; Typst: tinymist.
-      (add-to-list 'eglot-server-programs '((typst-ts-mode) . ("tinymist"))))
+      (add-to-list 'eglot-server-programs '((typst-ts-mode) . ("tinymist")))
+      ;; Rocq: coq-lsp.
+      (add-to-list 'eglot-server-programs '((coq-mode) . ("coq-lsp"))))
 
     ;; eldoc renders the LSP hover/signature docs. Keep the echo area to one line
     ;; and send the full docs to the *eldoc* buffer (C-c l d) to avoid clutter.
@@ -79,6 +83,14 @@
     ;;;; Typst
     (use-package typst-ts-mode
       :mode "\\.typ\\'")
+
+    ;;;; Rocq — Proof General steps proofs and shows goals; eglot can't display
+    ;; coq-lsp's goals, so it only adds diagnostics, hover and completion.
+    ;; `:mode' also keeps .v files away from the built-in verilog-mode.
+    (use-package proof-general
+      :mode ("\\.v\\'" . coq-mode)
+      :custom
+      (proof-splash-enable nil))
 
     ;;;; Lisp — Emacs Lisp needs no LSP; Common Lisp uses Sly.
     (use-package paredit

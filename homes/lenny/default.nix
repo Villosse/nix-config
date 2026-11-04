@@ -37,6 +37,7 @@
       ../common/widgets/quickshell
       ../common/widgets/wlogout
       ../common/apps/ocaml
+      ../common/apps/rocq
     ]
     ++ (builtins.attrValues outputs.homeManagerModules);
 
@@ -45,6 +46,7 @@
   home.stateVersion = stateVersion;
 
   languages.ocaml.enable = true;
+  languages.rocq.enable = true;
 
   mail = {
     enable = true;
