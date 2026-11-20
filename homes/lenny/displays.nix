@@ -4,7 +4,7 @@
 {rootPath, ...}: {
   windowManager = {
     # quotidien.png outside Halloween
-    wallpaper = "${rootPath}/assets/Wallpapers/spooky.jpg";
+    wallpaper = "${rootPath}/assets/Wallpapers/spooky-christmas.jpg";
     lockscreen = "${rootPath}/assets/Wallpapers/guitarGirlOnAtower.png";
     primaryDisplay = {
       # Matched by make/model/serial, not "eDP-N": the connector number depends
