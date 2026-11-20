@@ -7,7 +7,15 @@
   # connects normally in the background.
   systemd.services.NetworkManager-wait-online.enable = false;
 
-  services.openssh.enable = true;
+  services.openssh.enable = false;
+
+  services.tailscale = {
+    enable = true;
+    # Opens UDP 41641 so peers can connect directly instead of via DERP.
+    openFirewall = false;
+    # Lets lenny run `tailscale up/down` without sudo.
+    extraSetFlags = ["--operator=lenny"];
+  };
 
   nix.settings = {
     substituters = ["https://s3.cri.epita.fr/cri-nix-cache.s3.cri.epita.fr"];

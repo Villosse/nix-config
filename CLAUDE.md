@@ -59,6 +59,21 @@ Options if it ever needs to be faster (none applied): lower the PBKDF cost via
 enroll the TPM2 (`/dev/tpm0` exists) with `systemd-cryptenroll --tpm2-device=auto`,
 ideally with a PIN.
 
+## Networking / Tailscale
+
+Configured in `hosts/laptop/networking.nix`.
+
+- **Tailscale is enabled** with `extraSetFlags = ["--operator=lenny"]`, so `tailscale up` /
+  `tailscale down` (and the first login) work **without sudo**. `down` only disconnects;
+  `tailscaled` keeps running. Operator also allows `serve`/`funnel` and exit-node changes —
+  keep Funnel disabled in the tailnet policy unless needed.
+- **`openFirewall = false` on purpose** (written out explicitly). NAT traversal works through
+  the stateful firewall without opening UDP 41641, and on a laptop the upstream NAT matters
+  more. Flip it to `true` only if `tailscale status` shows peers stuck on `relay "..."`.
+- **openssh is disabled for now** (`services.openssh.enable = false`). With Tailscale on, an
+  open port 22 would be reachable from every tailnet device. Before re-enabling, check
+  `PasswordAuthentication` is off and/or restrict SSH with tailnet ACLs.
+
 ## Quickshell bar
 
 The bar is managed by `homes/common/widgets/quickshell/`. Config lives in `./config/` (QML files), deployed via `xdg.configFile."quickshell".source = ./config`. Quickshell runs as a systemd user service that carries `X-Restart-Triggers` on the config path (must be a string: `"${...}"`). As with Emacs, that doesn't reliably restart user units, so run `systemctl --user restart quickshell` after a switch.
