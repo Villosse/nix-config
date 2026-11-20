@@ -14,5 +14,6 @@
     docker-compose
     discord
     showmethekey
+    appimage-run
   ];
 }

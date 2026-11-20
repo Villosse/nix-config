@@ -26,12 +26,56 @@ in {
           ocp-indent # indentation
           menhir # parser generator
           findlib # library manager (ocamlfind)
+
+          # Libraries opam's ./configure looks up through findlib
+          re
+          base64
+          ocamlgraph
+          # opam wants cudf >= 0.11~rc1 but nixpkgs has 0.10, which opam builds
+          # against fine: only the findlib label changes. Drop on a nixpkgs bump.
+          (cudf.overrideAttrs (old: {
+            doCheck = false;
+            postInstall =
+              (old.postInstall or "")
+              + ''
+                sed -i 's/^version = .*/version = "0.11"/' \
+                  $out/lib/ocaml/${ocaml.version}/site-lib/cudf/META
+              '';
+          }))
+          dose3
+          opam-file-format
+          spdx_licenses
+          opam-0install-cudf
+          jsonm
+          uutf
+          sha
+          swhid_core
+          patch
+          tar
+          checkseum
+          decompress
+          mccs
+
+          # Their propagated deps: home.packages only links what is listed
+          seq
+          extlib
+          stdlib-shims
+          _0install-solver
+          uchar
+          optint
         ];
       description = "OCaml packages to install.";
     };
   };
 
   config = lib.mkIf cfg.enable {
+    # ocamlfind only searches its own store path otherwise. In .bashrc, not
+    # home.sessionVariables: those need a re-login to reach new terminals.
+    # Leaks into opam switches: `unset OCAMLPATH` there if libraries clash.
+    programs.bash.initExtra = ''
+      export OCAMLPATH="${config.home.profileDirectory}/lib/ocaml/${pkgs.ocamlPackages.ocaml.version}/site-lib"
+    '';
+
     home.packages =
       [
         pkgs.ocaml # compiler
