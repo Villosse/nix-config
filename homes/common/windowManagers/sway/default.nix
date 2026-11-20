@@ -139,7 +139,7 @@ in {
           drag = "enabled";
           drag_lock = "enabled";
           natural_scroll = "enabled";
-          dwt = "disabled";
+          dwt = "enable";
           dwtp = "disabled";
           accel_profile = "adaptive";
         };
