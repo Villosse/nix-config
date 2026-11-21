@@ -12,6 +12,8 @@
     #    zulip
 
     docker-compose
+    kubectl
+    wg
     discord
     showmethekey
     appimage-run

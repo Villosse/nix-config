@@ -13,8 +13,13 @@
     enable = true;
     # Opens UDP 41641 so peers can connect directly instead of via DERP.
     openFirewall = false;
-    # Lets lenny run `tailscale up/down` without sudo.
-    extraSetFlags = ["--operator=lenny"];
+    extraSetFlags = [
+      # Lets lenny run `tailscale up/down` without sudo.
+      "--operator=lenny"
+      # wg-home already routes 192.168.1.0/24; accepting tailnet subnet routes
+      # would let tailscale0 capture it (table 52 is looked up before main).
+      "--accept-routes=false"
+    ];
   };
 
   nix.settings = {
