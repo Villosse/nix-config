@@ -13,6 +13,7 @@
       ./nixpkgs.nix
       ./packages.nix
       ./displays.nix
+      ./ssh-config.nix
 
       ../common/scripts
 
@@ -26,6 +27,7 @@
       ../common/apps/antigravity
       ../common/apps/zsh
       ../common/apps/direnv
+      ../common/apps/ssh
 
       ../common/launchers/bemenu
 
