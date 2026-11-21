@@ -13,7 +13,7 @@
 
     docker-compose
     kubectl
-    wg
+    wireguard-tools
     discord
     showmethekey
     appimage-run
