@@ -128,14 +128,7 @@ ShellRoot {
       Column {
         id: cluster
         anchors.centerIn: parent
-        anchors.verticalCenterOffset: slide
         spacing: 28
-        opacity: 0
-
-        property real slide: 24
-        Component.onCompleted: { opacity = 1; slide = 0 }
-        Behavior on opacity { NumberAnimation { duration: 350; easing.type: Easing.OutCubic } }
-        Behavior on slide { NumberAnimation { duration: 350; easing.type: Easing.OutBack } }
 
         // Clock: one card per unit, like flip-clock tiles
         Row {
@@ -175,6 +168,12 @@ ShellRoot {
                 visible: index < 2
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 22
+                // not a thrown card: fade in once the tiles have landed
+                opacity: 0
+                SequentialAnimation on opacity {
+                  PauseAnimation { duration: 750 }
+                  NumberAnimation { to: 1; duration: 250; easing.type: Easing.OutCubic }
+                }
                 Repeater {
                   model: 2
                   Rectangle { width: 12; height: 12; color: root.ink }
@@ -193,7 +192,6 @@ ShellRoot {
             id: pwCard
             width: 374
             height: 176
-            transform: Translate { id: shake }
 
             Connections {
               target: root
@@ -202,9 +200,9 @@ ShellRoot {
             SequentialAnimation {
               id: shakeAnim
               loops: 2
-              NumberAnimation { target: shake; property: "x"; to: -8; duration: 40 }
-              NumberAnimation { target: shake; property: "x"; to: 8; duration: 70 }
-              NumberAnimation { target: shake; property: "x"; to: 0; duration: 40 }
+              NumberAnimation { target: pwCard; property: "shakeX"; to: -8; duration: 40 }
+              NumberAnimation { target: pwCard; property: "shakeX"; to: 8; duration: 70 }
+              NumberAnimation { target: pwCard; property: "shakeX"; to: 0; duration: 40 }
             }
 
             Column {
@@ -376,7 +374,7 @@ ShellRoot {
       // above don't shift when it hides
       Card {
         anchors { bottom: parent.bottom; bottomMargin: 56; horizontalCenter: parent.horizontalCenter }
-        opacity: root.player ? cluster.opacity : 0
+        opacity: root.player ? 1 : 0
         visible: opacity > 0
         Behavior on opacity { NumberAnimation { duration: 200 } }
         width: Math.min(parent.width - 96, 960)
@@ -441,8 +439,30 @@ ShellRoot {
   }
 
   // paper card: ink outline and a hard, unblurred shadow offset down-right
+  // Thrown onto the screen: each card flies in from off-screen in a random
+  // direction, spinning, after a random short delay, and lands slightly tilted.
   component Card: Item {
+    id: card
     default property alias content: face.data
+    property real shakeX: 0
+
+    readonly property real throwAngle: Math.random() * 2 * Math.PI
+    readonly property real landTilt: (Math.random() - 0.5) * 3
+    property real spin: (Math.random() - 0.5) * 50
+    rotation: landTilt + spin
+    transform: [
+      Translate { id: toss; x: Math.cos(card.throwAngle) * 1600; y: Math.sin(card.throwAngle) * 1600 },
+      Translate { x: card.shakeX }
+    ]
+
+    SequentialAnimation {
+      running: true
+      PauseAnimation { duration: Math.random() * 300 }
+      ParallelAnimation {
+        NumberAnimation { target: toss; properties: "x,y"; to: 0; duration: 550; easing.type: Easing.OutBack; easing.overshoot: 1.1 }
+        NumberAnimation { target: card; property: "spin"; to: 0; duration: 600; easing.type: Easing.OutCubic }
+      }
+    }
 
     Rectangle {
       x: 6
