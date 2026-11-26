@@ -112,7 +112,7 @@ Rectangle {
     RingWidget {
       icon: ""
       value: root.memPct
-      ringColor: Theme.red
+      ringColor: Theme.paper ? Theme.ink : Theme.red
       tooltip: root.memUsed !== "" ? `RAM ${root.memUsed} / ${root.memTotal} Go` : `RAM ${root.memPct}%`
     }
 

@@ -12,5 +12,5 @@ BarPill {
   maxWidth: 320
   visible: windowTitle !== ""
   text: (Theme.spooky ? "\u{F11EA}  " : "") + windowTitle
-  tooltip: implicitWidth >= maxWidth ? windowTitle : ""
+  interactive: false
 }

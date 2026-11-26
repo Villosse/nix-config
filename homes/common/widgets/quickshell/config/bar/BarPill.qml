@@ -10,6 +10,8 @@ Rectangle {
   property bool bold: true
   property int padding: 24
   property int maxWidth: 0
+  // false: no hover feedback, tooltip or clicks (display-only pills)
+  property bool interactive: true
   readonly property bool hovered: mouse.containsMouse
   signal clicked
   signal rightClicked
@@ -38,6 +40,7 @@ Rectangle {
   MouseArea {
     id: mouse
     anchors.fill: parent
+    enabled: root.interactive
     acceptedButtons: Qt.LeftButton | Qt.RightButton
     hoverEnabled: true
     onClicked: e => e.button === Qt.RightButton ? root.rightClicked() : root.clicked()

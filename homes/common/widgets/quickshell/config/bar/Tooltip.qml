@@ -15,8 +15,8 @@ PopupWindow {
   anchor.margins.top: 6
   anchor.rect.x: (target.width - implicitWidth) / 2
 
-  implicitWidth: label.implicitWidth + 16
-  implicitHeight: label.implicitHeight + 8
+  implicitWidth: label.implicitWidth + 16 + Theme.shadow
+  implicitHeight: label.implicitHeight + 8 + Theme.shadow
   color: "transparent"
   visible: shown && text !== ""
 
@@ -29,11 +29,11 @@ PopupWindow {
   function show() { delay.restart() }
   function hide() { delay.stop(); shown = false }
 
-  Rectangle {
-    anchors.fill: parent
-    color: Theme.base
-    border.color: root.accent
-    border.width: 1
+  Card {
+    anchors { fill: parent; rightMargin: Theme.shadow; bottomMargin: Theme.shadow }
+    color: Theme.popup
+    border.color: Theme.paper ? Theme.ink : root.accent
+    border.width: Math.max(1, Theme.border)
     radius: 6
 
     Text {

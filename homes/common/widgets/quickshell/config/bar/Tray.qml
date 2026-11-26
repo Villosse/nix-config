@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Effects
 import Quickshell
 import Quickshell.Services.SystemTray
 
@@ -16,7 +17,7 @@ RowLayout {
       implicitWidth: Theme.pillHeight
       implicitHeight: Theme.pillHeight
       radius: Theme.radius
-      color: Theme.surface0
+      color: Theme.paper ? "transparent" : Theme.surface0
 
       Image {
         anchors.centerIn: parent
@@ -25,6 +26,16 @@ RowLayout {
         source: modelData.icon
         smooth: true
         mipmap: true
+        // tray icons are drawn for dark bars: a hard ink shadow keeps light ones readable on paper
+        layer.enabled: Theme.paper
+        layer.effect: MultiEffect {
+          shadowEnabled: true
+          shadowColor: Theme.ink
+          shadowBlur: 0
+          shadowOpacity: 1
+          shadowHorizontalOffset: 1.5
+          shadowVerticalOffset: 1.5
+        }
       }
 
       QsMenuAnchor {

@@ -25,14 +25,16 @@ Rectangle {
         implicitWidth: Math.max(label.implicitWidth + 14, 32)
         implicitHeight: Theme.pillHeight - 10
         radius: 8
-        color: focused ? Theme.mauve : modelData.urgent ? Theme.red : Theme.surface1
+        border.width: focused ? Theme.border : 0
+        border.color: Theme.ink
+        color: focused ? Theme.active : modelData.urgent ? Theme.red : Theme.paper ? "transparent" : Theme.surface1
         Behavior on color { ColorAnimation { duration: 150 } }
 
         Text {
           id: label
           anchors.centerIn: parent
-          text: focused && Theme.spooky ? `\u{F0BA3} ${modelData.num}` : String(modelData.num)
-          color: focused || modelData.urgent ? Theme.base : Theme.lavender
+          text: !focused ? String(modelData.num) : Theme.spooky ? `\u{F0BA3} ${modelData.num}` : Theme.paper ? `\u{F0AE2} ${modelData.num}` : String(modelData.num)
+          color: focused ? Theme.onActive : modelData.urgent ? Theme.base : Theme.lavender
           font.family: Theme.font
           font.pixelSize: Theme.fontSize
           font.bold: true

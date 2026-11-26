@@ -79,7 +79,8 @@ Configured in `hosts/laptop/networking.nix`.
 The bar is managed by `homes/common/widgets/quickshell/`. Config lives in `./config/` (QML files), deployed via `xdg.configFile."quickshell".source = ./config`. Quickshell runs as a systemd user service that carries `X-Restart-Triggers` on the config path (must be a string: `"${...}"`). As with Emacs, that doesn't reliably restart user units, so run `systemctl --user restart quickshell` after a switch.
 
 - `bar/Bar.qml` — root panel window, layout only (left/center/right)
-- `bar/Theme.qml` — `pragma Singleton` palette (Catppuccin Macchiato, or a chill pixel-art Halloween look when `spooky: true` — DepartureMono Nerd Font, a few spooky widget glyphs; pairs with `assets/Wallpapers/spooky-pixel.png`, set separately in `homes/lenny/displays.nix`), font, pill metrics. Quickshell picks the singleton up without a `qmldir`. Never hardcode hex colours in widgets.
+- `bar/Theme.qml` — `pragma Singleton` palette chosen by `look`: `"catppuccin"` (Macchiato), `"spooky"` (chill pixel-art Halloween — DepartureMono Nerd Font, a few spooky widget glyphs; pairs with `assets/Wallpapers/spooky-pixel.png`, set separately in `homes/lenny/displays.nix`) or `"paper"` (current: neo-brutalist cream cards, ink outline + hard shadow, DepartureMono, matching the lockscreen). Also font and pill metrics. Quickshell picks the singleton up without a `qmldir`. Never hardcode hex colours in widgets.
+- `bar/Card.qml` — base surface of every pill and popup: ink border + hard offset shadow when `Theme.border`/`Theme.shadow` are non-zero (paper only), a plain rounded rect otherwise.
 - `bar/BarPill.qml` — base for every pill (`text`, `tooltip`, `clicked`/`rightClicked`/`wheel(delta)`)
 - `bar/Tooltip.qml` — `PopupWindow` anchored below its target. Tooltips must be popups: anything drawn above y=0 inside the bar is clipped.
 - `bar/SystemRings.qml` — CPU/RAM/GPU rings polled via `Process`. The dGPU uses RTD3 (`finegrained`), and `nvidia-smi` wakes it, so the GPU ring only runs it when a process other than sway (which always holds the card for the HDMI port) has `/dev/nvidiaN` open: it shows `off` when the GPU is powered down, `0%` when it's awake but unused, and `--` when `nvidia-smi` fails, typically "Driver/library version mismatch" after a rebuild bumps the NVIDIA driver without a reboot.
@@ -88,6 +89,7 @@ The bar is managed by `homes/common/widgets/quickshell/`. Config lives in `./con
 - Workspaces/window title use `Quickshell.I3` / `ToplevelManager`, and audio uses `Quickshell.Services.Pipewire`. No polling for these (Fn volume keys need no refresh hook). Brightness, battery, network and CPU/RAM still poll.
 - All `sh -c` commands in QML need `PATH` set — handled in the systemd service `Environment`
 - Test the working tree without switching: `quickshell -p homes/common/widgets/quickshell/config` (runs a second bar; Ctrl-C to stop)
+- `lock/shell.qml` — the lockscreen, a separate Quickshell instance started by sway's `Mod+x` (`quickshell -p ~/.config/quickshell/lock`, wallpaper via `LOCK_WALLPAPER`). Session-lock protocol + the `swaylock` PAM service; its palette is local to the file (same paper look). Locking is manual only — no swayidle, on purpose. Running it locks for real; if it breaks, sway stays locked: Ctrl+Alt+F2, then `WAYLAND_DISPLAY=wayland-1 swaylock`.
 
 ## Sway
 

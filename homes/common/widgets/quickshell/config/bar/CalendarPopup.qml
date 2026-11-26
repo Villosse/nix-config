@@ -19,8 +19,8 @@ PopupWindow {
   anchor.margins.top: 6
   anchor.rect.x: (target.width - implicitWidth) / 2
 
-  implicitWidth: content.implicitWidth + 24
-  implicitHeight: content.implicitHeight + 20
+  implicitWidth: content.implicitWidth + 24 + Theme.shadow
+  implicitHeight: content.implicitHeight + 20 + Theme.shadow
   color: "transparent"
 
   function shift(n) {
@@ -33,11 +33,11 @@ PopupWindow {
     year = today.getFullYear()
   }
 
-  Rectangle {
-    anchors.fill: parent
-    color: Theme.base
-    border.color: Theme.yellow
-    border.width: 1
+  Card {
+    anchors { fill: parent; rightMargin: Theme.shadow; bottomMargin: Theme.shadow }
+    color: Theme.popup
+    border.color: Theme.paper ? Theme.ink : Theme.yellow
+    border.width: Math.max(1, Theme.border)
     radius: 6
 
     HoverHandler { id: hover }
@@ -113,7 +113,7 @@ PopupWindow {
             text: weekNumber
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            color: Theme.surface1
+            color: Theme.muted
             font.family: Theme.font
             font.pixelSize: 11
           }
@@ -132,12 +132,12 @@ PopupWindow {
               && model.month === root.today.getMonth()
               && model.year === root.today.getFullYear()
             radius: height / 2
-            color: isToday ? Theme.yellow : "transparent"
+            color: isToday ? (Theme.paper ? Theme.active : Theme.yellow) : "transparent"
 
             Text {
               anchors.centerIn: parent
               text: parent.model.day
-              color: parent.isToday ? Theme.base : parent.model.month === root.month ? Theme.text : Theme.surface1
+              color: parent.isToday ? (Theme.paper ? Theme.onActive : Theme.base) : parent.model.month === root.month ? Theme.text : Theme.muted
               font.family: Theme.font
               font.pixelSize: 12
               font.bold: parent.isToday
