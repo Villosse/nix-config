@@ -3,7 +3,8 @@
     enable = true;
     enableBashIntegration = true;
     settings = {
-      palette = "catppuccin_macchiato";
+      # "paper" matches the bar/terminal; "catppuccin_macchiato" is the old look
+      palette = "paper";
       scan_timeout = 10;
       character = {
         success_symbol = " [[♥ ](green)  ](maroon)";
@@ -17,6 +18,15 @@
         disabled = false;
         format = "[$shlvl ](bold peach)";
         threshold = 2;
+      };
+      # Only the names used above: green/maroon/red (prompt), lavender (dir),
+      # peach (shlvl). Same accents as rio's paper palette.
+      palettes.paper = {
+        green = "#8fb996";
+        maroon = "#ec9a83";
+        red = "#e07a5f";
+        lavender = "#9ad8c8";
+        peach = "#d8a24a";
       };
       palettes.catppuccin_macchiato = {
         rosewater = "#f4dbd6";
