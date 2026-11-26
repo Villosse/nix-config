@@ -165,7 +165,7 @@ in {
         # Applications
         "${mod}+d" = "exec ${bemenu-launcher}/bin/bemenu-launcher";
         "${mod}+Return" = "exec ${rio}";
-        "${mod}+x" = "exec ${pkgs.swaylock}/bin/swaylock -i ${cfg.lockscreen} --indicator-radius 100";
+        "${mod}+x" = "exec env LOCK_WALLPAPER=${cfg.lockscreen} ${pkgs.quickshell}/bin/quickshell -p ${config.xdg.configHome}/quickshell/lock";
         "${mod}+s" = "exec ${pkgs.my-scripts.screenshot}";
 
         # Session
