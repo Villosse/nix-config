@@ -3,6 +3,7 @@ import Quickshell.Io
 
 BarPill {
   id: root
+  button: true
 
   property int count: 0
   property bool dnd: false

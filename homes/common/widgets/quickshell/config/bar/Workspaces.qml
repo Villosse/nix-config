@@ -13,21 +13,22 @@ Rectangle {
   RowLayout {
     id: row
     anchors.centerIn: parent
-    spacing: 2
+    spacing: Theme.paper ? 6 : 2
 
     Repeater {
       model: Array.from(I3.workspaces.values).sort((a, b) => a.num - b.num)
 
-      delegate: Rectangle {
+      // paper: every workspace is a raised button, the focused one filled
+      delegate: Card {
         required property var modelData
         readonly property bool focused: modelData.focused
 
         implicitWidth: Math.max(label.implicitWidth + 14, 32)
         implicitHeight: Theme.pillHeight - 10
         radius: 8
-        border.width: focused || modelData.urgent ? Theme.border : 0
-        border.color: Theme.ink
-        color: focused ? Theme.active : modelData.urgent ? Theme.red : Theme.paper ? "transparent" : Theme.surface1
+        shadowed: !wsMouse.pressed
+        transform: Translate { x: wsMouse.pressed ? Theme.shadow : 0; y: wsMouse.pressed ? Theme.shadow : 0 }
+        color: focused ? Theme.active : modelData.urgent ? Theme.red : Theme.paper ? Theme.surface0 : Theme.surface1
         Behavior on color { ColorAnimation { duration: 150 } }
 
         Text {
@@ -41,7 +42,9 @@ Rectangle {
         }
 
         MouseArea {
+          id: wsMouse
           anchors.fill: parent
+          cursorShape: Qt.PointingHandCursor
           onClicked: modelData.activate()
         }
       }

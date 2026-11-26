@@ -33,7 +33,7 @@ PanelWindow {
     anchors.left: parent.left
     anchors.leftMargin: 10
     anchors.verticalCenter: strip.verticalCenter
-    spacing: 4
+    spacing: Theme.paper ? 8 : 4
 
     Workspaces {}
     Divider { visible: Theme.paper && title.visible }
@@ -48,7 +48,7 @@ PanelWindow {
     anchors.right: parent.right
     anchors.rightMargin: 10
     anchors.verticalCenter: strip.verticalCenter
-    spacing: 4
+    spacing: Theme.paper ? 8 : 4
 
     Tray {}
     Divider {}

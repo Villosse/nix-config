@@ -1,6 +1,6 @@
 import QtQuick
 
-Rectangle {
+Card {
   id: root
   property color pillColor: Theme.surface0
   property color textColor: Theme.base
@@ -12,18 +12,25 @@ Rectangle {
   property int maxWidth: 0
   // false: no hover feedback, tooltip or clicks (display-only pills)
   property bool interactive: true
+  // paper: clickable pills are raised buttons (outline + shadow) that press down
+  property bool button: false
+  readonly property bool raised: Theme.paper && button
   readonly property bool hovered: mouse.containsMouse
   signal clicked
   signal rightClicked
   signal wheel(int delta)
 
-  implicitHeight: Theme.pillHeight
+  implicitHeight: Theme.chipHeight
   implicitWidth: maxWidth > 0 ? Math.min(label.implicitWidth + padding, maxWidth) : label.implicitWidth + padding
   radius: Theme.radius
   color: pillColor
-  // paper: any pill that isn't plain cream is a state chip, outlined like the focused workspace
-  border.width: Theme.paper && !Qt.colorEqual(pillColor, Theme.surface0) ? Theme.border : 0
-  border.color: Theme.ink
+  // paper: buttons, and any pill that isn't plain cream (a state chip), are outlined
+  border.width: raised || Theme.paper && !Qt.colorEqual(pillColor, Theme.surface0) ? Theme.border : 0
+  shadowed: raised && !mouse.pressed
+  transform: Translate {
+    x: root.raised && mouse.pressed ? Theme.shadow : 0
+    y: root.raised && mouse.pressed ? Theme.shadow : 0
+  }
 
   Behavior on color { ColorAnimation { duration: 300 } }
   Behavior on opacity { NumberAnimation { duration: 150 } }
@@ -46,9 +53,10 @@ Rectangle {
     enabled: root.interactive
     acceptedButtons: Qt.LeftButton | Qt.RightButton
     hoverEnabled: true
+    cursorShape: root.button ? Qt.PointingHandCursor : Qt.ArrowCursor
     onClicked: e => e.button === Qt.RightButton ? root.rightClicked() : root.clicked()
     onWheel: e => { if (e.angleDelta.y !== 0) root.wheel(e.angleDelta.y > 0 ? 1 : -1) }
-    onEntered: { root.opacity = 0.85; tip.show() }
+    onEntered: { if (!root.raised) root.opacity = 0.85; tip.show() }
     onExited: { root.opacity = 1.0; tip.hide() }
   }
 

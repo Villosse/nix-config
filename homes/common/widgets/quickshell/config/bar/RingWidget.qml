@@ -7,6 +7,8 @@ Item {
   required property int value  // 0-100
   property string label: value + "%"
   property string tooltip: ""
+  // paper: ink text (the color lives on the arc), muted when the ring is off
+  readonly property color textColor: !Theme.paper ? ringColor : Qt.colorEqual(ringColor, Theme.surface1) ? Theme.muted : Theme.ink
 
   implicitWidth: Theme.pillHeight
   implicitHeight: Theme.pillHeight
@@ -48,7 +50,7 @@ Item {
 
     Text {
       text: root.icon
-      color: root.ringColor
+      color: root.textColor
       font.family: Theme.font
       font.pixelSize: 11
       font.bold: true
@@ -56,7 +58,7 @@ Item {
 
     Text {
       text: root.label
-      color: root.ringColor
+      color: root.textColor
       font.family: Theme.font
       font.pixelSize: 11
     }

@@ -2,6 +2,7 @@ import QtQuick
 
 BarPill {
   id: root
+  button: true
   pillColor: Theme.yellow
   fontSize: 14
   padding: 32

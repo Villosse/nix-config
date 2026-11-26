@@ -4,19 +4,22 @@ import Quickshell
 import Quickshell.Services.SystemTray
 
 RowLayout {
-  spacing: 4
+  spacing: Theme.paper ? 8 : 4
 
   Repeater {
     model: SystemTray.items
 
-    delegate: Rectangle {
+    // paper: raised buttons like the other clickable pills
+    delegate: Card {
       id: trayIcon
       required property var modelData
 
-      implicitWidth: Theme.pillHeight
-      implicitHeight: Theme.pillHeight
+      implicitWidth: Theme.chipHeight
+      implicitHeight: Theme.chipHeight
       radius: Theme.radius
-      color: Theme.paper ? "transparent" : Theme.surface0
+      color: Theme.surface0
+      shadowed: !trayMouse.pressed
+      transform: Translate { x: trayMouse.pressed ? Theme.shadow : 0; y: trayMouse.pressed ? Theme.shadow : 0 }
 
       Image {
         anchors.centerIn: parent
@@ -38,7 +41,9 @@ RowLayout {
       }
 
       MouseArea {
+        id: trayMouse
         anchors.fill: parent
+        cursorShape: Qt.PointingHandCursor
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         onClicked: e => {
           if (e.button === Qt.RightButton && trayIcon.modelData.hasMenu)

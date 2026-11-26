@@ -5,6 +5,8 @@ import QtQuick
 Rectangle {
   // horizontal shadow offset; 0 for edge-to-edge surfaces, or the shadow leaves a notch
   property int shadowX: Theme.shadow
+  // false hides the shadow, e.g. while a button is pressed down into it
+  property bool shadowed: true
 
   radius: Theme.radius
   border.width: Theme.border
@@ -19,6 +21,6 @@ Rectangle {
     height: parent.height
     radius: parent.radius
     color: Theme.ink
-    visible: Theme.shadow > 0
+    visible: parent.shadowed && Theme.shadow > 0
   }
 }

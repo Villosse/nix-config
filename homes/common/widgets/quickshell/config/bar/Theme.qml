@@ -15,7 +15,8 @@ Singleton {
 
   // paper: every accent is the same cream card, only red (the wallpaper's
   // coral) keeps a meaning: low battery, urgent workspace. Ink is used for
-  // text, outlines and the rings. lock/shell.qml mirrors these values
+  // text and outlines; the rings are deep teal (CPU), coral (RAM) and mustard
+  // (GPU). lock/shell.qml mirrors these values
   readonly property var palettes: ({
     catppuccin: {
       base: "#24273a", surface0: "#363a4f", surface1: "#494d64", text: "#cad3f5",
@@ -31,8 +32,8 @@ Singleton {
     },
     paper: {
       base: "#2b2a27", surface0: "#f3e9c6", surface1: "#e3d6aa", text: "#2b2a27",
-      rosewater: "#2b2a27", mauve: "#f3e9c6", pink: "#2b2a27", red: "#e07a5f",
-      peach: "#2b2a27", yellow: "#f3e9c6", green: "#f3e9c6", teal: "#f3e9c6",
+      rosewater: "#c08a2a", mauve: "#f3e9c6", pink: "#2b2a27", red: "#e07a5f",
+      peach: "#3f8a80", yellow: "#f3e9c6", green: "#f3e9c6", teal: "#f3e9c6",
       blue: "#f3e9c6", lavender: "#2b2a27",
       active: "#9ad8c8", muted: "#6e6656"
     },
@@ -81,5 +82,7 @@ Singleton {
   readonly property string font: look === "catppuccin" ? "IosevkaTerm Nerd Font" : "DepartureMono Nerd Font"
   readonly property int fontSize: 13
   readonly property int pillHeight: 32
+  // pills and buttons inside the strip: smaller so the outline + shadow breathe
+  readonly property int chipHeight: paper ? pillHeight - 4 : pillHeight
   readonly property int radius: paper ? 6 : 12
 }

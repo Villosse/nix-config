@@ -3,6 +3,7 @@ import Quickshell.Bluetooth
 
 BarPill {
   id: root
+  button: true
 
   readonly property BluetoothAdapter adapter: Bluetooth.defaultAdapter
   readonly property bool on: adapter?.enabled ?? false
@@ -16,7 +17,8 @@ BarPill {
 
   visible: adapter !== null
   maxWidth: 220
-  pillColor: !on ? Theme.surface1 : first ? Theme.blue : Theme.lavender
+  // paper's lavender is ink (a text color): on = plain cream, connected = the teal accent
+  pillColor: !on ? Theme.surface1 : Theme.paper ? (first ? Theme.active : Theme.surface0) : first ? Theme.blue : Theme.lavender
   textColor: on ? Theme.base : Theme.text
   text: !on ? "󰂲" : first ? `󰂱 ${label(first)}${connected.length > 1 ? ` +${connected.length - 1}` : ""}` : "󰂯"
   tooltip: !on ? "Bluetooth off" : first ? connected.map(label).join("\n") : "No device connected"
