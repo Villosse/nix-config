@@ -114,6 +114,7 @@ Key facts (gotchas that cost real debugging):
 - **No color emoji in GUI — do not add `emojify`.** This pgtk build renders color-emoji fonts (Noto CBDT, Twitter SBIX) as tofu. `emojify` renders emoji as images but does network I/O + a stdin y/n prompt at startup, which crash-loops then freezes the headless daemon. One dashboard-footer emoji shows as a box; that's accepted.
 - **Copilot chat — install exactly one implementation.** copilot.el (0.9.0+) bundles a full first-party `copilot-chat.el`, so the standalone `copilot-chat` package is deliberately **not** installed and `ai.nix` has no `load-path` hack. Both files `(provide 'copilot-chat)`, so adding the separate package back makes load order decide which wins. Also do **not** set `copilot-server-executable`: nixpkgs already patches it to copilot-language-server's absolute store path, and overriding it with a bare name downgrades that to a `$PATH` lookup. Completion keys (TAB, C-<tab>, M-n/M-p) are bound upstream in `copilot-completion-map` — re-binding them via `:bind` forces an eager load at daemon startup.
 - **No temp files:** backups, autosaves, and lockfiles are all disabled in `ui.nix`.
+- **Theme:** `catppuccin-theme` with a custom `paper` flavor (the bar/rio palette, defined with `define-catppuccin-flavor-from` so every Catppuccin face is covered). The startup flavor is the `flavor` binding at the top of `theme.nix` (`"paper"` or any stock flavor); `C-c t` (`my/theme-toggle`) switches paper ↔ macchiato at runtime.
 
 ### AI in Emacs — current state and options
 
