@@ -12,39 +12,35 @@ BarPill {
 
   text: `${pct < 25 ? "󰃞" : pct < 50 ? "󰃟" : "󰃠"} ${pct}%`
 
+  // backlight dir, e.g. /sys/class/backlight/amdgpu_bl2 (the number changes between boots)
+  property string dir: ""
+
+  Process {
+    running: true
+    command: ["sh", "-c", "ls -d /sys/class/backlight/* | head -1"]
+    stdout: StdioCollector { onStreamFinished: root.dir = text.trim() }
+  }
+
   // blocks hardware readback for 1s after last scroll action
   Timer {
     id: settleTimer
     interval: 1000
     repeat: false
-  }
-
-  Timer {
-    interval: 2000
-    running: true
-    repeat: true
-    triggeredOnStart: true
-    onTriggered: if (!settleTimer.running) brightnessProc.running = true
+    onTriggered: current.reload()
   }
 
   FileView {
-    path: "/tmp/qs-brightness-refresh"
-    watchChanges: true
-    printErrors: false
-    onFileChanged: if (!settleTimer.running) brightnessProc.running = true
+    path: root.dir ? `${root.dir}/max_brightness` : ""
+    onLoaded: root.maxRaw = parseInt(text()) || 0
   }
 
-  Process {
-    id: brightnessProc
-    command: ["sh", "-c", "brightnessctl -m | awk -F, '{print $3, $5}'"]
-    stdout: SplitParser {
-      onRead: data => {
-        const parts = data.trim().split(" ").map(Number)
-        if (parts.length < 2 || !parts[1]) return
-        root.currentRaw = parts[0]
-        root.maxRaw = parts[1]
-      }
-    }
+  // inotify fires on any userspace write to the file (Fn keys, brightnessctl), so no polling
+  FileView {
+    id: current
+    path: root.dir ? `${root.dir}/brightness` : ""
+    watchChanges: true
+    onFileChanged: if (!settleTimer.running) reload()
+    onLoaded: if (!settleTimer.running) root.currentRaw = parseInt(text()) || 0
   }
 
   onWheel: delta => {

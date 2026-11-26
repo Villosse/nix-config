@@ -55,4 +55,6 @@
 
   system.stateVersion = stateVersion;
   services.usbmuxd.enable = true;
+  # quickshell Battery pill (Quickshell.Services.UPower)
+  services.upower.enable = true;
 }
