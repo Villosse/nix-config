@@ -10,23 +10,23 @@
 
   bemenu-launcher = pkgs.writeShellScriptBin "bemenu-launcher" ''
     exec ${pkgs.bemenu}/bin/bemenu-run \
-      --ab '#24273a' \
-      --af '#cad3f5' \
+      --ab '#2b2a27' \
+      --af '#f3e9c6' \
       --binding vim \
       --cw 15 \
-      --fb '#24273a' \
-      --ff '#cad3f5' \
+      --fb '#2b2a27' \
+      --ff '#f3e9c6' \
       --fn 'IosevkaTerm Nerd Font Semi-Bold 14' \
-      --hb '#24273a' \
-      --hf '#eed49f' \
+      --hb '#9ad8c8' \
+      --hf '#2b2a27' \
       --hp 10 \
       --ignorecase \
       --line-height 38 \
-      --nb '#24273a' \
-      --nf '#cad3f5' \
+      --nb '#2b2a27' \
+      --nf '#f3e9c6' \
       --prompt '  ' \
-      --tb '#24273a' \
-      --tf '#ed8796' \
+      --tb '#2b2a27' \
+      --tf '#e07a5f' \
       --vim-esc-exits \
       --wrap
   '';
@@ -72,35 +72,36 @@ in {
         {command = "${pkgs.wpaperd}/bin/wpaperd";}
       ];
 
-      # Catppuccin Macchiato colors
+      # Paper palette (same as the quickshell bar): teal frame on the focused
+      # window, ink elsewhere, coral when urgent
       colors = {
         focused = {
-          border = "#c6a0f6";
-          background = "#24273a";
-          text = "#cad3f5";
-          indicator = "#c6a0f6";
-          childBorder = "#c6a0f6";
+          border = "#9ad8c8";
+          background = "#2b2a27";
+          text = "#f3e9c6";
+          indicator = "#9ad8c8";
+          childBorder = "#9ad8c8";
         };
         unfocused = {
-          border = "#1e2030";
-          background = "#24273a";
-          text = "#cad3f5";
-          indicator = "#1e2030";
-          childBorder = "#1e2030";
+          border = "#2b2a27";
+          background = "#2b2a27";
+          text = "#f3e9c6";
+          indicator = "#2b2a27";
+          childBorder = "#2b2a27";
         };
         focusedInactive = {
-          border = "#1e2030";
-          background = "#24273a";
-          text = "#cad3f5";
-          indicator = "#1e2030";
-          childBorder = "#1e2030";
+          border = "#2b2a27";
+          background = "#2b2a27";
+          text = "#f3e9c6";
+          indicator = "#2b2a27";
+          childBorder = "#2b2a27";
         };
         urgent = {
-          border = "#ed8796";
-          background = "#24273a";
-          text = "#cad3f5";
-          indicator = "#ed8796";
-          childBorder = "#ed8796";
+          border = "#e07a5f";
+          background = "#2b2a27";
+          text = "#f3e9c6";
+          indicator = "#e07a5f";
+          childBorder = "#e07a5f";
         };
       };
 

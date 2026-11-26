@@ -56,29 +56,30 @@
       padding-x = 5;
       padding-y = [5 5];
 
-      # Catppuccin Macchiato
+      # Paper palette, dark side: the quickshell bar's ink as background and
+      # its cream as text; accents from the wallpaper (teal, coral, mustard).
       colors = {
-        background = "#24273a";
-        foreground = "#cad3f5";
-        cursor = "#f4dbd6";
-        selection-background = "#3a3e53";
-        selection-foreground = "#cad3f5";
-        black = "#494d64";
-        red = "#ed8796";
-        green = "#a6da95";
-        yellow = "#eed49f";
-        blue = "#8aadf4";
-        magenta = "#f5bde6";
-        cyan = "#8bd5ca";
-        white = "#a5adcb";
-        light_black = "#5b6078";
-        light_red = "#ed8796";
-        light_green = "#a6da95";
-        light_yellow = "#eed49f";
-        light_blue = "#8aadf4";
-        light_magenta = "#f5bde6";
-        light_cyan = "#8bd5ca";
-        light_white = "#b8c0e0";
+        background = "#2b2a27";
+        foreground = "#f3e9c6";
+        cursor = "#9ad8c8";
+        selection-background = "#4a463e";
+        selection-foreground = "#f3e9c6";
+        black = "#45423b";
+        red = "#e07a5f";
+        green = "#8fb996";
+        yellow = "#d8a24a";
+        blue = "#6fa8b8";
+        magenta = "#c98a9a";
+        cyan = "#9ad8c8";
+        white = "#d9cfb0";
+        light_black = "#6e6656";
+        light_red = "#ec9a83";
+        light_green = "#a8cfae";
+        light_yellow = "#e8bc6a";
+        light_blue = "#8cc0cf";
+        light_magenta = "#dba8b5";
+        light_cyan = "#b6e6da";
+        light_white = "#f3e9c6";
       };
     };
   };

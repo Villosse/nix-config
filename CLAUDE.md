@@ -161,7 +161,7 @@ After editing config: `home-manager switch` then `systemctl --user restart emacs
 
 ## Terminal (rio)
 
-Terminal emulator is **rio** (`homes/common/apps/rio/`), replacing ghostty. Uses `pkgs.rio` (prebuilt; building from source is slow). Config in `programs.rio.settings` (Catppuccin Macchiato, IosevkaTerm Nerd Font, `opacity = 0.85`, `confirm-before-quit = false` so Mod+Q closes instantly). sway launches it (`Mod+Return`, default `terminal`).
+Terminal emulator is **rio** (`homes/common/apps/rio/`), replacing ghostty. Uses `pkgs.rio` (prebuilt; building from source is slow). Config in `programs.rio.settings` (dark side of the bar's paper palette — ink `#2b2a27` background, cream text, teal/coral/mustard accents; sway borders and bemenu use the same colors — IosevkaTerm Nerd Font, `opacity = 0.85`, `confirm-before-quit = false` so Mod+Q closes instantly). sway launches it (`Mod+Return`, default `terminal`).
 
 - **Patched terminfo (`rio/terminfo.nix`).** rio's packaged terminfo lacks `Sync` (mode 2026) and `Tc` (truecolor) even though rio supports both at runtime → caused Emacs TTY ghost lines + washed-out colors. The module compiles a patched `rio` entry (`use=rio` + `Sync` + `Tc`) via `tic -x` and puts it first on `TERMINFO_DIRS`.
 - **No custom keybinds:** `bindings.keys` is currently empty, so Ctrl+Left/Right word motion and Shift+Enter newline (claude-code) use rio's defaults. To add some back, the sequences are `\E[1;5D`/`\E[1;5C` and `\E\r`; note `with` is a Nix keyword — quote it as `"with"`.
