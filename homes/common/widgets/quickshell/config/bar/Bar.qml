@@ -33,6 +33,7 @@ PanelWindow {
 
     Tray {}
     Network {}
+    Bluetooth {}
     Brightness {}
     Audio {}
     Notifications {}
