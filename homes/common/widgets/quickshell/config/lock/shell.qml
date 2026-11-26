@@ -13,12 +13,13 @@ import Quickshell.Services.Mpris
 ShellRoot {
   id: root
 
-  // paper palette, not the bar's Catppuccin
+  // same values as the bar's paper look (bar/Theme.qml), which this separate
+  // instance can't import
   readonly property color paper: "#f3e9c6"
   readonly property color paperDark: "#e3d6aa"
   readonly property color ink: "#2b2a27"
   readonly property color inkDim: "#6e6656"
-  readonly property color bad: "#c8553d"
+  readonly property color bad: "#e07a5f"
   // DepartureMono is drawn on an 11px grid: keep sizes multiples of 11
   readonly property string font: "DepartureMono Nerd Font"
 

@@ -16,6 +16,7 @@ PanelWindow {
     visible: Theme.paper
     anchors { fill: parent; bottomMargin: Theme.shadow }
     radius: 0
+    shadowX: 0
     color: Theme.surface0
   }
 

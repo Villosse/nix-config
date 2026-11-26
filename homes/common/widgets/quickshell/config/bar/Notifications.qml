@@ -7,7 +7,7 @@ BarPill {
   property int count: 0
   property bool dnd: false
 
-  pillColor: dnd ? Theme.red : Theme.surface0
+  pillColor: dnd ? (Theme.paper ? Theme.active : Theme.red) : Theme.surface0
   textColor: dnd ? Theme.base : Theme.lavender
   readonly property string icon: Theme.spooky ? "\u{F02A0}" : Theme.paper ? "\u{F009C}" : "󰂚"
   text: dnd ? (Theme.spooky ? "\u{F09F5}" : Theme.paper ? "\u{F0A91}" : "󰂛") : count > 0 ? `${icon} ${count}` : icon

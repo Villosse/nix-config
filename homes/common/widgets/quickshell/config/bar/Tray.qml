@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Effects
 import Quickshell
 import Quickshell.Services.SystemTray
 
@@ -24,18 +23,11 @@ RowLayout {
         width: 20
         height: 20
         source: modelData.icon
+        // ask the icon provider for a big icon and scale it down, or it hands
+        // back a tiny one that gets upscaled (blurry on the 1.5x panel)
+        sourceSize: Qt.size(64, 64)
         smooth: true
         mipmap: true
-        // tray icons are drawn for dark bars: a hard ink shadow keeps light ones readable on paper
-        layer.enabled: Theme.paper
-        layer.effect: MultiEffect {
-          shadowEnabled: true
-          shadowColor: Theme.ink
-          shadowBlur: 0
-          shadowOpacity: 1
-          shadowHorizontalOffset: 1.5
-          shadowVerticalOffset: 1.5
-        }
       }
 
       QsMenuAnchor {

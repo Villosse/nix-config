@@ -21,6 +21,9 @@ Rectangle {
   implicitWidth: maxWidth > 0 ? Math.min(label.implicitWidth + padding, maxWidth) : label.implicitWidth + padding
   radius: Theme.radius
   color: pillColor
+  // paper: any pill that isn't plain cream is a state chip, outlined like the focused workspace
+  border.width: Theme.paper && !Qt.colorEqual(pillColor, Theme.surface0) ? Theme.border : 0
+  border.color: Theme.ink
 
   Behavior on color { ColorAnimation { duration: 300 } }
   Behavior on opacity { NumberAnimation { duration: 150 } }
