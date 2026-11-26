@@ -4,8 +4,8 @@
 {rootPath, ...}: {
   windowManager = {
     # quotidien.png outside Halloween
-    wallpaper = "${rootPath}/assets/Wallpapers/spooky-christmas.jpg";
-    lockscreen = "${rootPath}/assets/Wallpapers/guitarGirlOnAtower.png";
+    wallpaper = "${rootPath}/assets/Wallpapers/chill-countryside.jpg";
+    lockscreen = "${rootPath}/assets/Wallpapers/chill-countryside.jpg";
     primaryDisplay = {
       # Matched by make/model/serial, not "eDP-N": the connector number depends
       # on which GPU driver registers first at boot. Since the open NVIDIA
