@@ -32,6 +32,7 @@ ShellRoot {
   property int failures: 0
   property bool failed: false
   signal rejected()
+  signal accepted()
 
   readonly property UPowerDevice bat: UPower.displayDevice
   // sticky: pausing must not hand the card to another player (another tab)
@@ -89,8 +90,7 @@ ShellRoot {
     onResponseRequiredChanged: if (responseRequired) { respond(pending); pending = "" }
     onCompleted: result => {
       if (result === PamResult.Success) {
-        lock.locked = false
-        Qt.quit()
+        root.accepted()
       } else {
         root.failed = true
         root.failures++
@@ -195,7 +195,12 @@ ShellRoot {
 
             Connections {
               target: root
-              function onRejected() { shakeAnim.restart() }
+              function onRejected() { shakeAnim.restart(); breakAnim.restart() }
+              function onAccepted() { fillDone.start() }
+            }
+            Connections {
+              target: pam
+              function onActiveChanged() { if (pam.active) fillAnim.restart(); else fillAnim.stop() }
             }
             SequentialAnimation {
               id: shakeAnim
@@ -239,34 +244,81 @@ ShellRoot {
                 }
               }
 
-              Rectangle {
+              // the field fills while PAM checks: full on success (then
+              // unlock), smashed into falling shards on failure
+              Item {
+                id: field
                 width: parent.width
                 height: 44
-                radius: 4
-                color: root.paperDark
-                border { width: 2; color: root.failed ? root.bad : root.ink }
+                property real fill: 0
+                property real breakT: 0
 
-                Text {
-                  anchors { left: parent.left; leftMargin: 14; verticalCenter: parent.verticalCenter }
-                  visible: input.text === ""
-                  text: "\u{F033E} password"
-                  font { family: root.font; pixelSize: 11 }
-                  color: root.inkDim
+                NumberAnimation { id: fillAnim; target: field; property: "fill"; from: 0; to: 0.85; duration: 2000; easing.type: Easing.OutCubic }
+                SequentialAnimation {
+                  id: fillDone
+                  NumberAnimation { target: field; property: "fill"; to: 1; duration: 200 }
+                  PauseAnimation { duration: 150 }
+                  ScriptAction { script: { lock.locked = false; Qt.quit() } }
                 }
-                TextInput {
-                  id: input
-                  anchors { fill: parent; leftMargin: 14; rightMargin: 14 }
-                  verticalAlignment: TextInput.AlignVCenter
-                  echoMode: TextInput.Password
-                  passwordCharacter: "■"
-                  cursorDelegate: Rectangle { width: 2; color: root.ink; visible: input.activeFocus }
-                  font { family: root.font; pixelSize: 22 }
-                  color: root.ink
-                  selectionColor: root.ink
-                  enabled: !pam.active
-                  focus: true
-                  onAccepted: { root.submit(text); text = "" }
-                  onTextChanged: if (text !== "") root.failed = false
+                SequentialAnimation {
+                  id: breakAnim
+                  NumberAnimation { target: field; property: "breakT"; from: 0; to: 1; duration: 700; easing.type: Easing.InQuad }
+                  PropertyAction { target: field; property: "fill"; value: 0 }
+                  PropertyAction { target: field; property: "breakT"; value: 0 }
+                }
+
+                Repeater {
+                  model: 8
+                  Rectangle {
+                    required property int index
+                    readonly property real r: Math.random() - 0.5
+                    visible: breakAnim.running
+                    width: field.width / 8
+                    height: field.height
+                    x: index * width + r * 80 * field.breakT
+                    y: field.breakT * field.breakT * (160 + r * 120)
+                    rotation: r * 160 * field.breakT
+                    opacity: 1 - field.breakT
+                    color: (index + 0.5) / 8 < field.fill ? root.ink : root.paperDark
+                    border { width: 2; color: root.bad }
+                  }
+                }
+
+                Rectangle {
+                  anchors.fill: parent
+                  visible: !breakAnim.running
+                  radius: 4
+                  color: root.paperDark
+                  border { width: 2; color: root.failed ? root.bad : root.ink }
+
+                  Rectangle {
+                    anchors { left: parent.left; top: parent.top; bottom: parent.bottom; margins: 2 }
+                    width: (parent.width - 4) * field.fill
+                    radius: 2
+                    color: root.ink
+                  }
+                  Text {
+                    anchors { left: parent.left; leftMargin: 14; verticalCenter: parent.verticalCenter }
+                    visible: input.text === "" && field.fill === 0
+                    text: "\u{F033E} password"
+                    font { family: root.font; pixelSize: 11 }
+                    color: root.inkDim
+                  }
+                  TextInput {
+                    id: input
+                    anchors { fill: parent; leftMargin: 14; rightMargin: 14 }
+                    verticalAlignment: TextInput.AlignVCenter
+                    echoMode: TextInput.Password
+                    passwordCharacter: "■"
+                    cursorDelegate: Rectangle { width: 2; color: root.ink; visible: input.activeFocus }
+                    font { family: root.font; pixelSize: 22 }
+                    color: root.ink
+                    selectionColor: root.ink
+                    enabled: !pam.active && !breakAnim.running && !fillDone.running
+                    focus: true
+                    onAccepted: { root.submit(text); text = "" }
+                    onTextChanged: if (text !== "") root.failed = false
+                  }
                 }
               }
 
