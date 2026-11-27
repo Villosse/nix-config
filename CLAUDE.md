@@ -89,7 +89,7 @@ The bar is managed by `homes/common/widgets/quickshell/`. Config lives in `./con
 - Workspaces/window title use `Quickshell.I3` / `ToplevelManager`, and audio uses `Quickshell.Services.Pipewire`. No polling for these (Fn volume keys need no refresh hook). Brightness, battery, network and CPU/RAM still poll.
 - All `sh -c` commands in QML need `PATH` set — handled in the systemd service `Environment`
 - Test the working tree without switching: `quickshell -p homes/common/widgets/quickshell/config` (runs a second bar; Ctrl-C to stop)
-- `lock/shell.qml` — the lockscreen, a separate Quickshell instance started by sway's `Mod+x` (`quickshell -p ~/.config/quickshell/lock`, wallpaper via `LOCK_WALLPAPER`). Session-lock protocol + the `swaylock` PAM service; its palette is local to the file (same paper look). Locking is manual only — no swayidle, on purpose. Running it locks for real; if it breaks, sway stays locked: Ctrl+Alt+F2, then `WAYLAND_DISPLAY=wayland-1 swaylock`.
+- `lock/shell.qml` — the lockscreen, a separate Quickshell instance started by sway's `Mod+x` (`quickshell -p ~/.config/quickshell/lock`, wallpaper via `LOCK_WALLPAPER`). Session-lock protocol + the `swaylock` PAM service; its palette is local to the file (same paper look). The password field fills while PAM checks and unlocks only once the fill finishes; a wrong password smashes it into falling shards. The lock surface exists once per screen, so its animations are driven by `root.accepted`/`root.rejected` and `pam.active`, never by ids from outside the surface. Locking is manual only — no swayidle, on purpose. Running it locks for real; if it breaks, sway stays locked: Ctrl+Alt+F2, then `WAYLAND_DISPLAY=wayland-1 swaylock`.
 
 ## Sway
 
